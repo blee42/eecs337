@@ -7,7 +7,7 @@ Project by Kevin Chen, Brittany Lee, Kevin Broh-Kahn, and Bhavita Jaiswal.
 2/6/2015 Update:
 Added scraper for all categories and nominees. `get_categories` will return data in this form:
 
-```
+```json
 [
     {
         'category': 'award1',
