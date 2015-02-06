@@ -1,15 +1,11 @@
 # Golden Globes Tweet Parser
 
 Project by Kevin Chen, Brittany Lee, Kevin Broh-Kahn, and Bhavita Jaiswal.
-
 <hr>
-
 This project is built off of a Flask boilerplate - [https://github.com/mjhea0/flask-boilerplate/](https://github.com/mjhea0/flask-boilerplate)
 
 ## Quick Start
-
 <hr>
-
 1. Clone the repo
   ```
   $ git clone git@github.com:blee42/eecs337.git
@@ -44,9 +40,7 @@ If you want to debug and run one script, use the following procedures.
   ```
 
 ## Team Notes
-
 <hr>
-
 2/6/2015 Update:
 Added scraper ("/scripts/gg_scraper.py") for all categories and nominees. `get_categories` will return data in this form:
 
