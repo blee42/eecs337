@@ -1,5 +1,6 @@
 # Project JSON
 goldenglobes2015.json
+data/*
 
 # Other
 .DS_Store
