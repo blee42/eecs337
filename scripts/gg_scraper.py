@@ -15,7 +15,7 @@ def main():
 
     categories = get_categories(soup)
     
-def get_categories(soup)
+def get_categories(soup):
     for category in soup.find_all('strong'): # each strong tag indicates a category
         entry = {}
         entry['category'] = category.contents[0]

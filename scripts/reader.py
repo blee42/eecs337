@@ -1,7 +1,7 @@
 import json
 import pprint
 
-def main(tweets='goldenglobes2015.json'):
+def main(tweets='data/goldenglobes2015.json'):
 	pp = pprint.PrettyPrinter()
 	f = open(tweets, 'r')
 

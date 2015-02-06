@@ -1,6 +1,11 @@
 # Project JSON
 goldenglobes2015.json
 
+# Other
+.DS_Store
+env
+venv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
