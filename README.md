@@ -28,6 +28,8 @@ Added scraper for all categories and nominees. `get_categories` will return data
                 '...'
             ]
     },
+
+    '...'
 ]
 ```
 
