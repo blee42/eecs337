@@ -14,6 +14,7 @@ def main():
     soup = bs4.BeautifulSoup(html)
 
     categories = get_categories(soup)
+    return categories
     
 def get_categories(soup):
     for category in soup.find_all('strong'): # each strong tag indicates a category
