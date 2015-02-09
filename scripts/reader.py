@@ -10,7 +10,7 @@ negStrings = ["afraid", "angry", "annoyed", "anxious", "arrogant", "ashamed", "a
 posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "innocent", "jolly", "kind", "lively", "lovely", "lucky", "obedient", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
 nominees = []
 
-def read(tweets='data/goldenglobes2015.json'):
+def read(tweets='../data/goldenglobes2015.json'):
 	pp = pprint.PrettyPrinter()
 	f = open(tweets, 'r')
 
@@ -21,10 +21,10 @@ def read(tweets='data/goldenglobes2015.json'):
 
 	return
 
-def parse(tweets='data/goldenglobes2015.json'):
+def parse(tweets='../data/goldenglobes2015.json'):
 	pp = pprint.PrettyPrinter()
 
-	categories = gg_scraper.main()
+	categories = nominee_scraper.main()
 	nominees = getNominees(categories)
 
 	f = open(tweets, 'r')
@@ -35,9 +35,8 @@ def parse(tweets='data/goldenglobes2015.json'):
 
 		tweetString = tweet["text"]
 
-		if isUsefulTweet(tweetString):
-			if "best" in tweetString:
-	 			pp.pprint(tweetString)
+		if "best" in tweetString and isUsefulTweet(tweetString):
+ 			pp.pprint(tweetString)
 
 			# check if tweet is positive emotion
 			# for posString in posStrings:
