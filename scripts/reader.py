@@ -50,11 +50,11 @@ def parse(tweets='../data/goldenglobes2015.json'):
 def getNominees(categories):
 	for category in categories:
 		for nominee in category["nominees"]:
-			if nominee not in categories:
+			if nominee['name'] not in categories:
 				# remove "," to remove movie title
-				if ", " in nominee:
-					nominee = nominee[:nominee.index(",")]
-				nominees.append(nominee)
+				if ", " in nominee['name']:
+					nominee['name'] = nominee['name'][:nominee['name'].index(",")]
+				nominees.append(nominee['name'])
 	return nominees
 
 def afterEventStart(time):

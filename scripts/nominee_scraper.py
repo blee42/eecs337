@@ -21,9 +21,13 @@ def get_categories(soup):
         entry = {}
         entry['category'] = category.contents[0]
         entry['nominees'] = []
+        entry['presenters'] = []
 
         for child in category.parent.next_sibling.next_sibling.children:
             if type(child) is not bs4.element.Tag: # not a <br/>
+                nominee = {}
+                nominee['name'] = child
+                nominee['score'] = 0
                 entry['nominees'].append(child)
 
         categories.append(entry)
