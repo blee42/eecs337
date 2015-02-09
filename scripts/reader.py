@@ -1,7 +1,7 @@
 import json
 import pprint
 import nltk
-import gg_scraper
+import nominee_scraper
 
 #winStrings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
 #loseStrings = ['lose', 'losing', 'lost']
