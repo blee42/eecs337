@@ -48,20 +48,50 @@ Added scraper ("/scripts/gg_scraper.py") for all categories and nominees. `get_c
         'category': 'award1',
         'nominees': 
             [
-                'nominee1',
-                'nominee2',
+                {
+                    'name': 'nominee1',
+                    'score': 0
+                },
+                {
+                    'name': 'nominee2',
+                    'score': 0
+                },
                 '...'
-            ]
+            ],
+        'presenters':
+            [
+                {
+                  'name': 'presenter1', # populated as we go along
+                  'score': 0
+                },
+                '...'
+            ],
+        '...'
     },
 
     {
         'category': 'award2',
         'nominees': 
             [
-                'nominee1',
-                'nominee2',
+                {
+                    'name': 'nominee1',
+                    'score': 0
+                },
+                {
+                    'name': 'nominee2',
+                    'score': 0
+                },
                 '...'
-            ]
+            ],
+        'presenters':
+            [
+                {
+                  'name': 'presenter1',
+                  'score': 0
+                },
+                '...'
+            ],
+        '...'
     },
 
     '...'
