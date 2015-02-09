@@ -18,6 +18,8 @@ def main():
     
 def get_categories(soup):
     for category in soup.find_all('strong'): # each strong tag indicates a category
+        if category.contents[0] == 'Television': # random header halfway down page
+            continue
         entry = {}
         entry['category'] = category.contents[0]
         entry['nominees'] = []
@@ -28,7 +30,7 @@ def get_categories(soup):
                 nominee = {}
                 nominee['name'] = child
                 nominee['score'] = 0
-                entry['nominees'].append(child)
+                entry['nominees'].append(nominee)
 
         categories.append(entry)
 
