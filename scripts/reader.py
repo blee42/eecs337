@@ -4,6 +4,7 @@ import json
 import pprint
 import nltk
 import nominee_scraper
+import os
 
 #winStrings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
 #loseStrings = ['lose', 'losing', 'lost']
@@ -16,6 +17,10 @@ wishStrings = ["hope", "hoping", "if", "luck"]
 nominees = []
 categories = nominee_scraper.main()
 
+def test():
+    return "hello world"
+
+
 def main():
     init()
 
@@ -26,6 +31,7 @@ def main():
     while (1):
         raw_input('Hit Enter for results: ')
         get_current_winners()
+        return categories
 
 def init():
     global nominees
@@ -41,7 +47,7 @@ def read(tweets='../data/goldenglobes2015.json'):
 
     return
 
-def parse(tweets='../data/goldenglobes2015.json'):
+def parse(tweets='data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
     count = 0
@@ -49,23 +55,19 @@ def parse(tweets='../data/goldenglobes2015.json'):
         tweet = json.loads(f.readline())
 
         tweet_string = tweet["text"]
-
-        if "Best" in tweet_string and is_useful_tweet(tweet_string) and "wins" in tweet_string:
+        nominee = is_useful_tweet(tweet_string)
+        if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
-                process(tweet_string)
-
-            # check if tweet is positive emotion
-            # for posString in posStrings:
-            #   if posString in tweet_string:        
+                process(nominee)
 
         # if count%1000 == 0:
         #     print count
         count+=1
     return
 
-def process(tweet):
-    mentioned = get_mentioned_nominees(tweet)
-    relevant = update_relevant_categories(mentioned)
+def process(nominee):
+    # mentioned = get_mentioned_nominees(tweet)
+    relevant = update_relevant_categories(nominee)
 
     # print "[MENTIONED] ", mentioned
     # print "[RELEVANT] ", relevant
@@ -119,7 +121,7 @@ def is_useful_tweet(tweet):
 
     for nominee in nominees:
         if nominee in tweet:
-            return True
+            return nominee
     return False
 
 def is_wishful_tweet(tweet):
