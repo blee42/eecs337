@@ -12,6 +12,7 @@ pp = pprint.PrettyPrinter()
 
 negStrings = ["afraid", "angry", "annoyed", "anxious", "arrogant", "ashamed", "awful", "bad", "bewildered", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "fierce", "foolish", "frantic", "frightened", "grieving", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "nervous", "obnoxious", "outrageous", "panicky", "repulsive", "safe", "scared", "shy", "sleepy", "sore", "strange", "tense", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
 posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "innocent", "jolly", "kind", "lively", "lovely", "lucky", "obedient", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
+wishStrings = ["hope", "hoping", "if", "luck"]
 nominees = []
 categories = nominee_scraper.main()
 
@@ -49,9 +50,9 @@ def parse(tweets='../data/goldenglobes2015.json'):
 
         tweet_string = tweet["text"]
 
-        if "best" in tweet_string and is_useful_tweet(tweet_string):
-            # pp.pprint(tweet_string)
-            process(tweet_string)
+        if "Best" in tweet_string and is_useful_tweet(tweet_string) and "wins" in tweet_string:
+            if not is_wishful_tweet(tweet_string.lower()):
+                process(tweet_string)
 
             # check if tweet is positive emotion
             # for posString in posStrings:
@@ -118,6 +119,12 @@ def is_useful_tweet(tweet):
 
     for nominee in nominees:
         if nominee in tweet:
+            return True
+    return False
+
+def is_wishful_tweet(tweet):
+    for word in wishStrings:
+        if word in tweet:
             return True
     return False
 
