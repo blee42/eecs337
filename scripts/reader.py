@@ -29,9 +29,11 @@ def main():
     thread.start()
 
     while (1):
-        raw_input('Hit Enter for results: ')
+        raw_input('========== REFRESH ==========')
         get_current_winners()
-        return categories
+
+        # Uncomment to send categories to view
+        # return categories
 
 def init():
     global nominees
@@ -47,7 +49,7 @@ def read(tweets='../data/goldenglobes2015.json'):
 
     return
 
-def parse(tweets='data/goldenglobes2015.json'):
+def parse(tweets='../data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
     count = 0
@@ -55,10 +57,28 @@ def parse(tweets='data/goldenglobes2015.json'):
         tweet = json.loads(f.readline())
 
         tweet_string = tweet["text"]
+
+       
         nominee = is_useful_tweet(tweet_string)
+        
+        # WINNERS
         if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
+
+        # PRESENTERS
+        presenter = ''
+        category = ''
+        tokens = tweet_string.lower().split()
+        if "presents" in tokens and nominee:
+            index_presents = tokens.index("presents")
+            for tok in tokens[:index_presents]:
+                if tok.isupper():
+                    presenter = tok
+            for tok in tokens[index_presents:]:
+                category = find_category(tokens[index_presents:])
+            
+        process_presenters(presenter, category)
 
         # if count%1000 == 0:
         #     print count
@@ -72,10 +92,19 @@ def process(nominee):
     # print "[MENTIONED] ", mentioned
     # print "[RELEVANT] ", relevant
 
+def process_presenters(presenter, category):
+     for cat in categories:
+        if cat == category:
+            cat['presenters'].append(presenter)
+
 def get_current_winners():
     for category in categories:
         print bcolors.HEADER + '[CATEGORY] ' + bcolors.ENDC,
         print category['category']
+        print bcolors.OKBLUE + '[PRESENTERS] ' + bcolors.ENDC,
+        for presenter in category['presenters']:
+            print presenter, 
+        print
         category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
         print bcolors.OKBLUE + '[WINNER] ' + bcolors.ENDC,
         print category['nominees'][0]['name']
@@ -129,6 +158,22 @@ def is_wishful_tweet(tweet):
         if word in tweet:
             return True
     return False
+
+def find_category(tweet):
+    best_category_count = 0
+    best_category = ''
+
+    for category in categories:
+        for word in category['category'].split():
+            count = 0
+            if word.lower() in tweet:
+                count +=1
+        if count > best_category_count:
+            best_category_count = count
+            best_category = category
+
+    return best_category
+
 
 def afterEventStart(time):
     date_array = time.split(" ")
