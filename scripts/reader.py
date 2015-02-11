@@ -23,11 +23,7 @@ def test():
 
 
 def main():
-    init()
-
-    thread = Thread(target = parse, args = {})
-    thread.daemon = True
-    thread.start()
+    thread = run()
 
     while (1):
         inp = raw_input('Hit Enter for results: \n')
@@ -37,6 +33,14 @@ def main():
         return categories
 
     thread.join()
+
+def run():
+    init()
+    thread = Thread(target=parse, args={})
+    thread.daemon = True
+    thread.start()
+
+    return thread
 
 def init():
     global nominees
@@ -65,9 +69,9 @@ def parse(tweets='data/goldenglobes2015.json'):
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
 
-        # if count%1000 == 0:
-        print '\rCount: ',count,
-        sys.stdout.flush()
+        if count%100000 == 0:
+            print '\rCount: ',count,
+            sys.stdout.flush()
         count+=1
 
         line = f.readline()
@@ -90,7 +94,7 @@ def get_current_winners():
         print bcolors.OKBLUE + '[SCORE] ' + bcolors.ENDC, 
         print category['nominees'][0]['score']
         print ''
-    return
+    return categories
 
 def get_nominees(categories):
     nominees = []
