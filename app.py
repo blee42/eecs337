@@ -7,6 +7,7 @@ from flask import Flask, render_template, request
 import logging
 from logging import Formatter, FileHandler
 from forms import *
+from scripts import reader
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -42,7 +43,10 @@ def login_required(test):
 
 @app.route('/')
 def home():
-    return render_template('pages/placeholder.home.html')
+    categories = reader.main()
+    for category in categories:
+        category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
+    return render_template('pages/placeholder.home.html', context=categories)
 
 
 @app.route('/about')

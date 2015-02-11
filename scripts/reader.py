@@ -5,6 +5,7 @@ import pprint
 import nltk
 import nominee_scraper
 import sys
+import os
 
 #winStrings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
 #loseStrings = ['lose', 'losing', 'lost']
@@ -16,6 +17,10 @@ posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "ch
 wishStrings = ["hope", "hoping", "if", "luck"]
 nominees = []
 categories = nominee_scraper.main()
+
+def test():
+    return "hello world"
+
 
 def main():
     init()
@@ -29,6 +34,7 @@ def main():
         if inp == 'break':
             break
         get_current_winners()
+        return categories
 
     thread.join()
 
@@ -46,7 +52,7 @@ def read(tweets='../data/goldenglobes2015.json'):
 
     return
 
-def parse(tweets='../data/goldenglobes2015.json'):
+def parse(tweets='data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
     count = 0
@@ -54,14 +60,10 @@ def parse(tweets='../data/goldenglobes2015.json'):
     while(line != ''):
         tweet = json.loads(line)
         tweet_string = tweet["text"]
-
-        if "Best" in tweet_string and is_useful_tweet(tweet_string) and "wins" in tweet_string:
+        nominee = is_useful_tweet(tweet_string)
+        if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
-                process(tweet_string)
-
-            # check if tweet is positive emotion
-            # for posString in posStrings:
-            #   if posString in tweet_string:        
+                process(nominee)
 
         # if count%1000 == 0:
         print '\rCount: ',count,
@@ -71,9 +73,9 @@ def parse(tweets='../data/goldenglobes2015.json'):
         line = f.readline()
     return
 
-def process(tweet):
-    mentioned = get_mentioned_nominees(tweet)
-    relevant = update_relevant_categories(mentioned)
+def process(nominee):
+    # mentioned = get_mentioned_nominees(tweet)
+    relevant = update_relevant_categories(nominee)
 
     # print "[MENTIONED] ", mentioned
     # print "[RELEVANT] ", relevant
@@ -127,7 +129,7 @@ def is_useful_tweet(tweet):
 
     for nominee in nominees:
         if nominee in tweet:
-            return True
+            return nominee
     return False
 
 def is_wishful_tweet(tweet):

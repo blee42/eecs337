@@ -14,6 +14,7 @@ def main():
     soup = bs4.BeautifulSoup(html)
 
     categories = get_categories(soup)
+
     return categories
     
 def get_categories(soup):
@@ -35,6 +36,5 @@ def get_categories(soup):
         categories.append(entry)
 
     return categories
-
 
 
