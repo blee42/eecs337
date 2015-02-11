@@ -4,6 +4,7 @@ import json
 import pprint
 import nltk
 import nominee_scraper
+import sys
 
 #winStrings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
 #loseStrings = ['lose', 'losing', 'lost']
@@ -24,8 +25,12 @@ def main():
     thread.start()
 
     while (1):
-        raw_input('Hit Enter for results: ')
+        inp = raw_input('Hit Enter for results: \n')
+        if inp == 'break':
+            break
         get_current_winners()
+
+    thread.join()
 
 def init():
     global nominees
@@ -45,9 +50,9 @@ def parse(tweets='../data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
     count = 0
-    while(1):
-        tweet = json.loads(f.readline())
-
+    line = f.readline()
+    while(line != ''):
+        tweet = json.loads(line)
         tweet_string = tweet["text"]
 
         if "Best" in tweet_string and is_useful_tweet(tweet_string) and "wins" in tweet_string:
@@ -59,8 +64,11 @@ def parse(tweets='../data/goldenglobes2015.json'):
             #   if posString in tweet_string:        
 
         # if count%1000 == 0:
-        #     print count
+        print '\rCount: ',count,
+        sys.stdout.flush()
         count+=1
+
+        line = f.readline()
     return
 
 def process(tweet):
