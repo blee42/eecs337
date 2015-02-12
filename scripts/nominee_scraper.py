@@ -37,4 +37,27 @@ def get_categories(soup):
 
     return categories
 
+def get_names_from_twitter(array):
+    base_url = "https://twitter.com/"
 
+    for entry in array:
+        twitter_id = entry[0][1:]
+        page = base_url + twitter_id
+
+        try:
+            html = read_page(page)
+        except urllib2.HTTPError:
+            print "no such id"
+            continue
+        except urllib2.URLError:
+            print "no host"
+            continue
+        except UnicodeEncodeError:
+            print "unicode char"
+            continue
+
+        soup = bs4.BeautifulSoup(html)
+
+        for name_element in soup.find_all("a", { "class" : "ProfileHeaderCard-nameLink" }):
+            print twitter_id
+            print name_element.getText()

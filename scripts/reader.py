@@ -59,6 +59,7 @@ def read(tweets='../data/goldenglobes2015.json'):
 def parse(tweets='data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
+    parties = []
     count = 0
     line = f.readline()
     while(line != ''):
@@ -69,12 +70,24 @@ def parse(tweets='data/goldenglobes2015.json'):
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
 
+        if not is_retweet(tweet_string) and is_a_party(tweet_string):
+            for word in tweet_string.split(" "):
+                if word[:1] == "@":
+                    if not word == "@" and not word == "@goldenglobes":
+                        parties.append(word.lower())
+
         if count%100000 == 0:
             print '\rCount: ',count,
             sys.stdout.flush()
         count+=1
 
         line = f.readline()
+
+        # stop around end of tweets before readline error
+        if count == 1750000:
+            fdist = nltk.FreqDist(parties)
+            nominee_scraper.get_names_from_twitter(fdist.most_common(50))
+            break
     return
 
 def process(nominee):
@@ -127,8 +140,13 @@ def update_relevant_categories(mentioned):
 
     return relevant
 
-def is_useful_tweet(tweet):
+def is_retweet(tweet):
     if tweet[:4] == "RT @":
+        return True
+    return False
+
+def is_useful_tweet(tweet):
+    if is_retweet(tweet):
         return False
 
     for nominee in nominees:
@@ -140,6 +158,15 @@ def is_wishful_tweet(tweet):
     for word in wishStrings:
         if word in tweet:
             return True
+    return False
+
+def is_a_party(tweet):
+    partyStrings = ["parties", "party"];
+    
+    for partyString in partyStrings:
+        if partyString in tweet:
+            return True
+            
     return False
 
 def afterEventStart(time):
