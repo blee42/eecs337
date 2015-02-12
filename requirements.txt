@@ -14,3 +14,4 @@ wsgiref==0.1.2
 Flask-WTF==0.9.4
 beautifulsoup4==4.3.2
 nltk==3.0
+numpy
