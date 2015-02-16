@@ -1,0 +1,12 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Red Carpet{% endblock %}
+{% block content %}
+
+<div>
+	<h1>Best Dressed</h1>
+	{% for person in context %}
+	<h3>{{ person }} </h3>
+	{% endfor %}
+</div>
+
+{% endblock %}

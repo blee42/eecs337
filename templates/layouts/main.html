@@ -92,10 +92,10 @@
       <div class="page-header text-center">
         <h1>Live Leader Aggregator</h1>
         <h3>
-          <span>Red Carpet</span>   |   
-          <span>Winners</span>    |   
-          <span>Presenters</span>   |   
-          <span>Parties</span>
+          <a href="{{ url_for('red_carpet') }}"><span>Red Carpet</span></a>  |   
+          <a href="{{ url_for('home') }}"><span>Winners</span></a>    |   
+          <a href=""><span>Presenters</span></a>   |   
+          <a href="{{ url_for('parties') }}"><span>Parties</span></a>
         </h3>
       </div>
       {% block content %}{% endblock %}
