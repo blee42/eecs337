@@ -254,15 +254,15 @@ def is_red_carpet(tweet):
     return False
 
 def is_best_dressed(tweet):
-    bestDressedStrings = ['bestdressed', 'BestDressed', 'Bestdressed']
+    bestDressedStrings = ['bestdressed', 'BestDressed']
     for word in bestDressedStrings:
         if word in tweet:
             return True
     return False
 
 def is_worst_dressed(tweet):
-    worstDressedStrings = ['worstdressed', 'WorstDressed', 'Worstdressed']
-    for word in bestDressedStrings:
+    worstDressedStrings = ['worstdressed', 'WorstDressed']
+    for word in worstDressedStrings:
         if word in tweet:
             return True
     return False
