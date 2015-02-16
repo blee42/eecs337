@@ -4,9 +4,21 @@
 
 <div>
 	{% for category in context %}
-	<h3>CATEGORY: {{ category['category'] }}</h3>
-	<h4>WINNER: {{ category['nominees'][0]['name'] }}</h4>
-	<h4>SCORE: {{ category['nominees'][0]['score'] }}</h4>
+  <div class='winners-container'>
+    <div class='winners-content'>
+    	<h3>{{ category['category'] }}</h3>
+    	<h4>WINNER: {{ category['nominees'][0]['name'] }}</h4>
+    	<h4>SCORE: {{ category['nominees'][0]['score'] }}</h4>
+    </div>
+    <div class='winners-expandable'>
+      {% for nominee in category['nominees'][1:] %}
+        <div class='winners-losers'>
+          <h5> {{ nominee['name']}} </h5>
+          <h5> Score: {{ nominee['score'] }} </h5>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 	{% endfor %}
 </div>
 

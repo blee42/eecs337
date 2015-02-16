@@ -21,7 +21,6 @@ categories = nominee_scraper.main()
 def test():
     return "hello world"
 
-
 def main():
     thread = run()
 
@@ -76,26 +75,17 @@ def parse(tweets='data/goldenglobes2015.json'):
                     if not word == "@" and not word == "@goldenglobes":
                         parties.append(word.lower())
 
-        if count%100000 == 0:
-            print '\rCount: ',count,
-            sys.stdout.flush()
-        count+=1
+        # if count%100000 == 0:
+        #     print '\rCount: ',count,
+        #     sys.stdout.flush()
+        # count+=1
 
         line = f.readline()
 
-        # stop around end of tweets before readline error
-        if count == 1750000:
-            fdist = nltk.FreqDist(parties)
-            nominee_scraper.get_names_from_twitter(fdist.most_common(50))
-            break
     return
 
 def process(nominee):
-    # mentioned = get_mentioned_nominees(tweet)
     relevant = update_relevant_categories(nominee)
-
-    # print "[MENTIONED] ", mentioned
-    # print "[RELEVANT] ", relevant
 
 def get_current_winners():
     for category in categories:
