@@ -153,6 +153,11 @@ def parse(tweets='data/goldenglobes2015.json'):
 def process(nominee):
     relevant = update_relevant_categories(nominee)
 
+def process_presenters(presenter, category):
+     for cat in categories:
+        if cat == category:
+            cat['presenters'].append(presenter)
+
 def get_current_winners():
     # for category in categories:
     #     print bcolors.HEADER + '[CATEGORY] ' + bcolors.ENDC,
