@@ -4,6 +4,7 @@ import json
 import pprint
 import nltk
 import nominee_scraper
+import sys
 import os
 import sys
 
@@ -22,19 +23,25 @@ best_dressed = {}
 
 
 def main():
-    init()
+    thread = run()
 
-    thread = Thread(target = parse, args = {})
+    while (1):
+        inp = raw_input('Hit Enter for results: \n')
+        if inp == 'break':
+            break
+        get_current_winners()
+        print best_dressed
+        return categories
+
+    thread.join()
+
+def run():
+    init()
+    thread = Thread(target=parse, args={})
     thread.daemon = True
     thread.start()
 
-    while (1):
-        raw_input('==========REFRESH ==========')
-        # get_current_winners()
-
-        print best_dressed
-        # Uncomment to send categories to view
-        # return categories
+    return thread
 
 def init():
     global nominees
@@ -53,43 +60,25 @@ def read(tweets='../data/goldenglobes2015.json'):
 def parse(tweets='../data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
+    parties = []
     count = 0
-    while(1):
-        tweet = json.loads(f.readline())
-
+    line = f.readline()
+    while(line != ''):
+        tweet = json.loads(line)
         tweet_string = tweet["text"]
-
-       
-        # nominee = is_useful_tweet(tweet_string)
         
         # WINNERS
-        # if "Best" in tweet_string and nominee and "wins" in tweet_string:
-        #     if not is_wishful_tweet(tweet_string.lower()):
-        #         process(nominee)
-
-        # PRESENTERS
-        # presenter = ''
-        # category = ''
-        # tokens = tweet_string.lower().split()
-        # if "presents" in tokens and nominee:
-        #     index_presents = tokens.index("presents")
-        #     for tok in tokens[:index_presents]:
-        #         if tok.isupper():
-        #             presenter = tok
-        #     for tok in tokens[index_presents:]:
-        #         category = find_category(tokens[index_presents:])
-            
-        # process_presenters(presenter, category)
+        nominee = is_useful_tweet(tweet_string)
+        if "Best" in tweet_string and nominee and "wins" in tweet_string:
+            if not is_wishful_tweet(tweet_string.lower()):
+                process(nominee)
 
         # RED CARPET
         if tweet_string[:4] == "RT @":
             continue
         if "RedCarpet" in tweet_string and "BestDressed" in tweet_string:
             tokens = tweet_string.split()
-            # print tweet_string
-            # print tokens
             tagged_tokens = nltk.pos_tag(tokens)
-            # print tagged_tokens
             for tok in xrange(0,len(tagged_tokens)-1,2):
                 if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
                     continue
@@ -107,15 +96,27 @@ def parse(tweets='../data/goldenglobes2015.json'):
                         best_dressed[name] += 1
                     else:
                         best_dressed[name] = 1
- 
-            # print
-            # print "========================"
+
+        # PARTY
+        if not is_retweet(tweet_string) and is_a_party(tweet_string):
+            for word in tweet_string.split(" "):
+                if word[:1] == "@":
+                    if not word == "@" and not word == "@goldenglobes":
+                        parties.append(word.lower())
 
         if count%100000 == 0:
             print '\rCount: ',count,
             sys.stdout.flush()
-        count +=1
 
+        count+=1
+
+        line = f.readline()
+
+        # stop around end of tweets before readline error
+        if count == 1750000:
+            fdist = nltk.FreqDist(parties)
+            nominee_scraper.get_names_from_twitter(fdist.most_common(50))
+            break
     return
 
 def process(nominee):
@@ -144,7 +145,7 @@ def get_current_winners():
         print bcolors.OKBLUE + '[SCORE] ' + bcolors.ENDC, 
         print category['nominees'][0]['score']
         print ''
-    return
+    return categories
 
 def get_nominees(categories):
     nominees = []
@@ -177,8 +178,13 @@ def update_relevant_categories(mentioned):
 
     return relevant
 
-def is_useful_tweet(tweet):
+def is_retweet(tweet):
     if tweet[:4] == "RT @":
+        return True
+    return False
+
+def is_useful_tweet(tweet):
+    if is_retweet(tweet):
         return False
 
     for nominee in nominees:
@@ -192,21 +198,14 @@ def is_wishful_tweet(tweet):
             return True
     return False
 
-def find_category(tweet):
-    best_category_count = 0
-    best_category = ''
-
-    for category in categories:
-        for word in category['category'].split():
-            count = 0
-            if word.lower() in tweet:
-                count +=1
-        if count > best_category_count:
-            best_category_count = count
-            best_category = category
-
-    return best_category
-
+def is_a_party(tweet):
+    partyStrings = ["parties", "party"];
+    
+    for partyString in partyStrings:
+        if partyString in tweet:
+            return True
+            
+    return False
 
 def afterEventStart(time):
     date_array = time.split(" ")

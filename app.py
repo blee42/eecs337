@@ -15,6 +15,8 @@ from scripts import reader
 
 app = Flask(__name__)
 app.config.from_object('config')
+categories = reader.categories
+reader.run()
 #db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
@@ -43,7 +45,7 @@ def login_required(test):
 
 @app.route('/')
 def home():
-    categories = reader.main()
+    categories = reader.get_current_winners()
     for category in categories:
         category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
     return render_template('pages/placeholder.home.html', context=categories)
