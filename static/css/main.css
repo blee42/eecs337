@@ -34,3 +34,37 @@ a {
  ****************************************************************************/
 
 /* Various other styles end */
+
+.winners-container {
+    background-color: #d8d8d8;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    /*height: 200px;*/
+    /*width: 48%;*/
+    /*display: inline-block;*/
+}
+
+.winners-content {
+    padding: 20px;
+}
+
+.winners-expandable {
+    display: none;
+    background-color: #232323;
+    border-radius: 0 0 10px 10px;
+
+}
+
+.winners-losers {
+    text-align: center;
+    min-width: 200px;
+    margin-left: 20px;
+    display: inline-block;
+    padding: 5px 10px 5px 10px;
+    border-left: 1px #d8d8d8 solid;
+    border-right: 1px #d8d8d8 solid;
+}
+
+.winners-expandable h5 {
+    color: #d8d8d8;
+}
