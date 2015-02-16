@@ -19,7 +19,9 @@ wishStrings = ["hope", "hoping", "if", "luck"]
 punct = ["!", ",", ".", "&", "@", "#", "-", "'"]
 nominees = []
 categories = nominee_scraper.main()
+parties = []
 best_dressed = {}
+worst_dressed = {}
 
 
 def main():
@@ -30,8 +32,7 @@ def main():
         if inp == 'break':
             break
         get_current_winners()
-        print best_dressed
-        return categories
+        return { 'categories': categories, 'best_dressed': best_dressed, 'parties': parties }
 
     thread.join()
 
@@ -57,10 +58,9 @@ def read(tweets='../data/goldenglobes2015.json'):
 
     return
 
-def parse(tweets='../data/goldenglobes2015.json'):
+def parse(tweets='data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
-    parties = []
     count = 0
     line = f.readline()
     while(line != ''):
@@ -74,11 +74,16 @@ def parse(tweets='../data/goldenglobes2015.json'):
                 process(nominee)
 
         # RED CARPET
-        if tweet_string[:4] == "RT @":
-            continue
-        if "RedCarpet" in tweet_string and "BestDressed" in tweet_string:
+        if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
             tokens = tweet_string.split()
+
+            # stop_words = nltk.corpus.stopwords.words('english')
+            # for word in stop_words:
+            #     if word in tokens:
+            #         tokens.remove(word)
+            
             tagged_tokens = nltk.pos_tag(tokens)
+
             for tok in xrange(0,len(tagged_tokens)-1,2):
                 if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
                     continue
@@ -96,6 +101,34 @@ def parse(tweets='../data/goldenglobes2015.json'):
                         best_dressed[name] += 1
                     else:
                         best_dressed[name] = 1
+
+        if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_worst_dressed(tweet_string):
+            tokens = tweet_string.split()
+
+            # stop_words = nltk.corpus.stopwords.words('english')
+            # for word in stop_words:
+            #     if word in tokens:
+            #         tokens.remove(word)
+            
+            tagged_tokens = nltk.pos_tag(tokens)
+
+            for tok in xrange(0,len(tagged_tokens)-1,2):
+                if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
+                    continue
+
+                flag = False
+                for symbol in punct:
+                    if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
+                        flag = True
+                if flag:
+                    continue
+
+                if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
+                    name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
+                    if name in worst_dressed.keys():
+                        worst_dressed[name] += 1
+                    else:
+                        worst_dressed[name] = 1
 
         # PARTY
         if not is_retweet(tweet_string) and is_a_party(tweet_string):
@@ -146,6 +179,12 @@ def get_current_winners():
         print category['nominees'][0]['score']
         print ''
     return categories
+
+def get_current_red_carpet():
+    return { 'best_dressed': best_dressed, 'worst_dressed': worst_dressed }
+
+def get_current_parties():
+    return parties
 
 def get_nominees(categories):
     nominees = []
@@ -205,6 +244,27 @@ def is_a_party(tweet):
         if partyString in tweet:
             return True
             
+    return False
+
+def is_red_carpet(tweet):
+    redCarpetStrings = ['redcarpet', 'RedCarpet']
+    for word in redCarpetStrings:
+        if word in tweet:
+            return True
+    return False
+
+def is_best_dressed(tweet):
+    bestDressedStrings = ['bestdressed', 'BestDressed', 'Bestdressed']
+    for word in bestDressedStrings:
+        if word in tweet:
+            return True
+    return False
+
+def is_worst_dressed(tweet):
+    worstDressedStrings = ['worstdressed', 'WorstDressed', 'Worstdressed']
+    for word in bestDressedStrings:
+        if word in tweet:
+            return True
     return False
 
 def afterEventStart(time):
