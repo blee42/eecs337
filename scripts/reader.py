@@ -23,6 +23,8 @@ parties = []
 best_dressed = {}
 worst_dressed = {}
 
+stop_words = nltk.corpus.stopwords.words('english')
+
 def main():
     thread = run()
 
@@ -31,7 +33,7 @@ def main():
         if inp == 'break':
             break
         get_current_winners()
-        return { 'categories': categories, 'best_dressed': best_dressed, 'parties': parties }
+        # return { 'categories': categories, 'best_dressed': best_dressed, 'parties': parties }
 
     thread.join()
 
@@ -75,22 +77,24 @@ def parse(tweets='data/goldenglobes2015.json'):
         # RED CARPET
         if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
             tokens = tweet_string.split()
-
-            # stop_words = nltk.corpus.stopwords.words('english')
-            # for word in stop_words:
-            #     if word in tokens:
-            #         tokens.remove(word)
-            
             tagged_tokens = nltk.pos_tag(tokens)
 
             for tok in xrange(0,len(tagged_tokens)-1,2):
+                flag = False
+                for word in stop_words:
+                    if word == tagged_tokens[tok][0]:
+                        flag = True
+
                 if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
                     continue
 
-                flag = False
+                if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
+                    continue
+
                 for symbol in punct:
                     if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
                         flag = True
+
                 if flag:
                     continue
 
@@ -103,19 +107,20 @@ def parse(tweets='data/goldenglobes2015.json'):
 
         if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_worst_dressed(tweet_string):
             tokens = tweet_string.split()
-
-            # stop_words = nltk.corpus.stopwords.words('english')
-            # for word in stop_words:
-            #     if word in tokens:
-            #         tokens.remove(word)
-            
             tagged_tokens = nltk.pos_tag(tokens)
 
             for tok in xrange(0,len(tagged_tokens)-1,2):
+                flag = False
+                for word in stop_words:
+                    if word == tagged_tokens[tok][0]:
+                        flag = True
+
                 if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
                     continue
 
-                flag = False
+                if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
+                    continue
+
                 for symbol in punct:
                     if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
                         flag = True
@@ -154,19 +159,19 @@ def process_presenters(presenter, category):
             cat['presenters'].append(presenter)
 
 def get_current_winners():
-    for category in categories:
-        print bcolors.HEADER + '[CATEGORY] ' + bcolors.ENDC,
-        print category['category']
-        print bcolors.OKBLUE + '[PRESENTERS] ' + bcolors.ENDC,
-        for presenter in category['presenters']:
-            print presenter, 
-        print
-        category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
-        print bcolors.OKBLUE + '[WINNER] ' + bcolors.ENDC,
-        print category['nominees'][0]['name']
-        print bcolors.OKBLUE + '[SCORE] ' + bcolors.ENDC, 
-        print category['nominees'][0]['score']
-        print ''
+    # for category in categories:
+    #     print bcolors.HEADER + '[CATEGORY] ' + bcolors.ENDC,
+    #     print category['category']
+    #     print bcolors.OKBLUE + '[PRESENTERS] ' + bcolors.ENDC,
+    #     for presenter in category['presenters']:
+    #         print presenter, 
+    #     print
+    #     category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
+    #     print bcolors.OKBLUE + '[WINNER] ' + bcolors.ENDC,
+    #     print category['nominees'][0]['name']
+    #     print bcolors.OKBLUE + '[SCORE] ' + bcolors.ENDC, 
+    #     print category['nominees'][0]['score']
+    #     print ''
     return categories
 
 def get_current_red_carpet():
@@ -243,15 +248,15 @@ def is_red_carpet(tweet):
     return False
 
 def is_best_dressed(tweet):
-    bestDressedStrings = ['bestdressed', 'BestDressed', 'Bestdressed']
+    bestDressedStrings = ['bestdressed', 'BestDressed']
     for word in bestDressedStrings:
         if word in tweet:
             return True
     return False
 
 def is_worst_dressed(tweet):
-    worstDressedStrings = ['worstdressed', 'WorstDressed', 'Worstdressed']
-    for word in bestDressedStrings:
+    worstDressedStrings = ['worstdressed', 'WorstDressed']
+    for word in worstDressedStrings:
         if word in tweet:
             return True
     return False
