@@ -31,11 +31,20 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
 
 6. Navigate to [http://localhost:5000](http://localhost:5000)
 
+If you see errors involving not having the correct nltk resources, then open up a python window and run:
+  ```
+  >>> import nltk
+  >>> nltk.download()
+  ```
+This will open a window called the 'NLTK Downloader'. Make sure you have the following installed:
+  Corpora -> stopwords
+  Models -> maxent_treebank_pos
+
 
 If you want to debug and run one script, use the following procedures.
   ```
   $ python -i [filename]
-  $ >> [function name]
+  $ >>> [function name]
   ```
 
 ## Team Notes
