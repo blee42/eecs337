@@ -12,11 +12,8 @@ import sys
 # import selenium.webdriver as webdriver
 # from pyvirtualdisplay import Display
 import time
-<<<<<<< HEAD
 import copy
-=======
 import timeit
->>>>>>> e04348c21b5eea54f3a80644c7658691d7b6e8ad
 
 #### DEBUG ####
 pp = pprint.PrettyPrinter()
