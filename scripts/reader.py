@@ -167,12 +167,8 @@ def parse(tweets):
             tweet_string = tweet["text"]
         else:
             tweet_string = line["text"]
-        
-<<<<<<< HEAD
-=======
-    
+
         # WINNERS
->>>>>>> e04348c21b5eea54f3a80644c7658691d7b6e8ad
         nominee = is_useful_tweet(tweet_string)
         if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
@@ -439,7 +435,6 @@ def print_current_winners():
         print ''
     return categories
 
-<<<<<<< HEAD
 def get_current_winners():
     # for category in categories:
     #     category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
@@ -448,7 +443,5 @@ def get_current_winners():
 def get_presenters():
     return presenters
 
-=======
->>>>>>> e04348c21b5eea54f3a80644c7658691d7b6e8ad
 # read_stream('../data/goldenglobes2015.json')
 
