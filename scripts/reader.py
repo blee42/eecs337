@@ -7,6 +7,7 @@ import nominee_scraper
 import sys
 import os
 import sys
+from nltk import sent_tokenize, word_tokenize, pos_tag, ne_chunk
 
 #winStrings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
 #loseStrings = ['lose', 'losing', 'lost']
@@ -17,6 +18,8 @@ negStrings = ["afraid", "angry", "annoyed", "anxious", "arrogant", "ashamed", "a
 posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "innocent", "jolly", "kind", "lively", "lovely", "lucky", "obedient", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
 wishStrings = ["hope", "hoping", "if", "luck"]
 presentStrings = ["presenting", "present", "presented", "presenter"]
+stopList= ["Golden", "Globe" , "GOLDEN" , "GLOBE" , "Actress" , "TV" , "Drama" , "Actor" , "Best" , "Song" , "Film" , "Movie" , "Present" , "Award" , "Original" , "Screenplay", "Comedy/Musical" , "Comedy", "DAMM" , "She" , "He" , "Make" ,"Adding" , "Can't", "To" , "At" , "I" , "Love", "The" , "Remember", "If" , "Purple", "Yoda", "Boy", "It", "Represent" , "Nominees"] 
+
 punct = ["!", ",", ".", "&", "@", "#", "-", "'"]
 nominees = []
 categories = nominee_scraper.main()
@@ -74,11 +77,39 @@ def parse(tweets='../data/goldenglobes2015.json'):
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
 
-        prsenter = is_presenter_tweet(tweet_string)
         if  is_presenterList(tweet_string.lower()):
-            if presenter in tweet_string:
-                pp.pprint(presenter)
+            if "best" in tweet_string.lower():
+                category= is_one_category(tweet_string)
+                if category:
+                    #name = extract_name(tweet_string)
+                    list_word=tweet_string.split()
+                    print("Presenter is : ")
+                    for word in list_word:
+                        if word[0].isupper() :
+                            if(is_notstop_word(word)):
+                                print(word +"\n")
+                                
 
+
+            #nominee= is_useful_tweet(tweet_string)
+            #category= is_one_category(tweet_string)
+            #if nominee or category :
+             #   pp.pprint(tweet_string)
+
+            #elif category :
+             #   pp.pprint(category)
+
+
+
+
+
+          #  list_word=tweet_string.split()
+           # for word in list_word:
+            #    if word[0].isupper() :
+             #       for word in nominee
+
+
+                
         # RED CARPET
         if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
             tokens = tweet_string.split()
@@ -216,6 +247,18 @@ def update_relevant_categories(mentioned):
 
     return relevant
 
+# def extract_name(tweet):
+#     tokens = nltk.tokenize.word_tokenize(tweet)
+#     pos = nltk.pos_tag(tokens)
+#     sentt = nltk.ne_chunk(pos, binary = False)
+#     print sentt
+#     person = []
+#     for subtree in sentt.subtrees(filter=lambda t: t.node == 'PERSON'):
+#         for leave in subtree.leaves():
+#             person.append(leave)
+#     print "person=", person
+
+
 def is_retweet(tweet):
     if tweet[:4] == "RT @":
         return True
@@ -230,11 +273,27 @@ def is_useful_tweet(tweet):
             return nominee
     return False
 
+def is_one_category(tweet):
+    if is_retweet(tweet):
+        return False
+    for category in categories:
+        for cat in category["category"]:
+            if cat in tweet:
+                return cat
+            
+    return false        
+
 def is_wishful_tweet(tweet):
     for word in wishStrings:
         if word in tweet:
             return True
     return False
+
+def is_notstop_word(word):
+    for a in stopList:
+        if a in word:
+            return False
+    return True
 
 def is_a_party(tweet):
     partyStrings = ["parties", "party"];
@@ -244,15 +303,17 @@ def is_a_party(tweet):
             return True
             
     return False
-
-def is_presenter_tweet(tweet):
+def is_cat_tweet(word):
     if is_retweet(tweet):
         return False
-
-    for presenter in prsenters:
-        if presenter in tweet:
-            return presenter
+    for category in categories:
+        for nominee in category["nominees"]:
+            nom_str=str(nominee)
+            pp.pprint(word)
+            return word
     return False
+
+
 
 def is_presenterList(tweet):
     for word in presentStrings:
