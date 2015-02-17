@@ -31,13 +31,12 @@ posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "ch
 # posStrings = []
 wishStrings = ["hope", "hoping", "if", "luck"]
 presentStrings = ["presenting", "present", "presented", "presenter"]
-<<<<<<< HEAD
+
 stopList= ["Golden", "Globe" , "GOLDEN" , "GLOBE" , "Actress" , "TV" , "Drama" , "Actor" , "Best" , "Song" , "Film" , "Movie" , "Present" , "Award" , "Original" , "Screenplay", "Comedy/Musical" , "Comedy", "DAMM" , "She" , "He" , "Make" ,"Adding" , "Can't", "To" , "At" , "I" , "Love", "The" , "Remember", "If" , "Purple", "Yoda", "Boy", "It", "Represent" , "Nominees"] 
 
-=======
 
 #### TOOL LISTS ####
->>>>>>> origin/master
+
 punct = ["!", ",", ".", "&", "@", "#", "-", "'"]
 stop_words = nltk.corpus.stopwords.words('english')
 
@@ -175,7 +174,7 @@ def parse(tweets):
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
 
-<<<<<<< HEAD
+
         if  is_presenterList(tweet_string.lower()):
             if "best" in tweet_string.lower():
                 category= is_one_category(tweet_string)
@@ -209,73 +208,73 @@ def parse(tweets):
 
 
                 
-        # RED CARPET
-        if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
-            tokens = tweet_string.split()
-            tagged_tokens = nltk.pos_tag(tokens)
+        # # RED CARPET
+        # if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
+        #     tokens = tweet_string.split()
+        #     tagged_tokens = nltk.pos_tag(tokens)
 
-            for tok in xrange(0,len(tagged_tokens)-1,2):
-                flag = False
-                for word in stop_words:
-                    if word == tagged_tokens[tok][0]:
-                        flag = True
+        #     for tok in xrange(0,len(tagged_tokens)-1,2):
+        #         flag = False
+        #         for word in stop_words:
+        #             if word == tagged_tokens[tok][0]:
+        #                 flag = True
 
-                if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
-                    continue
+        #         if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
+        #             continue
 
-                if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
-                    continue
+        #         if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
+        #             continue
 
-                for symbol in punct:
-                    if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
-                        flag = True
+        #         for symbol in punct:
+        #             if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
+        #                 flag = True
 
-                if flag:
-                    continue
+        #         if flag:
+        #             continue
 
-                if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
-                    name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
-                    if name in best_dressed.keys():
-                        best_dressed[name] += 1
-                    else:
-                        best_dressed[name] = 1
+        #         if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
+        #             name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
+        #             if name in best_dressed.keys():
+        #                 best_dressed[name] += 1
+        #             else:
+        #                 best_dressed[name] = 1
 
-        if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_worst_dressed(tweet_string):
-            tokens = tweet_string.split()
-            tagged_tokens = nltk.pos_tag(tokens)
+        # if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_worst_dressed(tweet_string):
+        #     tokens = tweet_string.split()
+        #     tagged_tokens = nltk.pos_tag(tokens)
 
-            for tok in xrange(0,len(tagged_tokens)-1,2):
-                flag = False
-                for word in stop_words:
-                    if word == tagged_tokens[tok][0]:
-                        flag = True
+        #     for tok in xrange(0,len(tagged_tokens)-1,2):
+        #         flag = False
+        #         for word in stop_words:
+        #             if word == tagged_tokens[tok][0]:
+        #                 flag = True
 
-                if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
-                    continue
+        #         if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
+        #             continue
 
-                if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
-                    continue
+        #         if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
+        #             continue
 
-                for symbol in punct:
-                    if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
-                        flag = True
-                if flag:
-                    continue
+        #         for symbol in punct:
+        #             if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
+        #                 flag = True
+        #         if flag:
+        #             continue
 
-                if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
-                    name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
-                    if name in worst_dressed.keys():
-                        worst_dressed[name] += 1
-                    else:
-                        worst_dressed[name] = 1
+        #         if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
+        #             name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
+        #             if name in worst_dressed.keys():
+        #                 worst_dressed[name] += 1
+        #             else:
+        #                 worst_dressed[name] = 1
 
-        # PARTY
-        if not is_retweet(tweet_string) and is_a_party(tweet_string):
-            for word in tweet_string.split(" "):
-                if word[:1] == "@":
-                    if not word == "@" and not word == "@goldenglobes":
-                        parties.append(word.lower())
-=======
+        # # PARTY
+        # if not is_retweet(tweet_string) and is_a_party(tweet_string):
+        #     for word in tweet_string.split(" "):
+        #         if word[:1] == "@":
+        #             if not word == "@" and not word == "@goldenglobes":
+        #                 parties.append(word.lower())
+
         if not is_retweet(tweet_string):
             # RED CARPET
             if is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
@@ -350,7 +349,7 @@ def parse(tweets):
                     sentiments['upvote'] += 1
                 elif is_sad_tweet(tweet_string.lower()):
                     sentiments['downvote'] += 1
->>>>>>> origin/master
+
 
         # if count%100000 == 0:
         #     print '\rCount: ',count,
