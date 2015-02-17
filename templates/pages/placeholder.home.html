@@ -8,7 +8,9 @@
   <div class='winners-container'>
     <div class='winners-content'>
     	<h3>{{ category['category'] }}</h3>
-      <h4>PRESENTER: </h4>
+      {% if category['presenters'] %}
+      <h4>PRESENTER: {{ category['presenters'][0]['name'] }}</h4>
+      {% endif %}
     	<h4>WINNER: {{ category['nominees'][0]['name'] }}</h4>
     	<h4>SCORE: {{ category['nominees'][0]['score'] }}</h4>
     </div>

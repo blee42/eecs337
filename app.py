@@ -69,6 +69,11 @@ def parties():
     parties = reader.get_current_parties()
     return render_template('pages/placeholder.parties.html', context=parties)
 
+@app.route('/presenters')
+def presenters():
+    presenters = reader.get_presenters()
+    return render_template('pages/placeholder.presenters.html', context=presenters)
+
 
 @app.route('/about')
 def about():
