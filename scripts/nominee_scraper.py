@@ -61,3 +61,5 @@ def get_names_from_twitter(array):
         for name_element in soup.find_all("a", { "class" : "ProfileHeaderCard-nameLink" }):
             print twitter_id
             print name_element.getText()
+def get_hosts():
+    return hosts
