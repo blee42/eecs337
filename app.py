@@ -2,12 +2,14 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 # from flask.ext.sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
 from forms import *
-from scripts import reader
+from scripts import reader, nominee_scraper
+
+TWEET_STREAM = 'data/goldenglobes2015.json'
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -16,7 +18,6 @@ from scripts import reader
 app = Flask(__name__)
 app.config.from_object('config')
 categories = reader.categories
-reader.run()
 #db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
@@ -45,17 +46,21 @@ def login_required(test):
 
 @app.route('/')
 def home():
+    context = {}
+    
     categories = reader.get_current_winners()
-    parties = reader.get_current_parties()
     for category in categories:
         category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
-    return render_template('pages/placeholder.home.html', context=categories)
+
+    hosts = nominee_scraper.get_hosts()
+    
+    context['categories'] = categories
+    context['hosts'] = hosts
+    return render_template('pages/placeholder.home.html', context=context)
 
 @app.route('/redcarpet')
 def red_carpet():
     red_carpet_data = reader.get_current_red_carpet()
-    # best_dressed = red_carpet_data['red_carpet']
-    # worst_dressed = red_carpet_data['worst_dressed']
     return render_template('pages/placeholder.redcarpet.html', context=red_carpet_data)
 
 @app.route('/parties')
@@ -63,6 +68,10 @@ def parties():
     parties = reader.get_current_parties()
     return render_template('pages/placeholder.parties.html', context=parties)
 
+@app.route('/sentiment')
+def sentiments():
+    sentiments = reader.get_current_sentiments()
+    return render_template('pages/placeholder.sentiments.html', context=sentiments)
 
 @app.route('/about')
 def about():
@@ -86,6 +95,12 @@ def forgot():
     form = ForgotForm(request.form)
     return render_template('forms/forgot.html', form=form)
 
+@app.route('/dataset/<corpus>')
+def dataset(corpus):
+    reader.run('data/' + corpus)
+    return redirect(url_for('home'))
+
+
 # Error handlers.
 
 
@@ -108,6 +123,10 @@ if not app.debug:
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('errors')
+
+@app.before_first_request
+def before_first_request():
+    reader.run(TWEET_STREAM)
 
 #----------------------------------------------------------------------------#
 # Launch.
