@@ -46,9 +46,22 @@ def login_required(test):
 @app.route('/')
 def home():
     categories = reader.get_current_winners()
+    parties = reader.get_current_parties()
     for category in categories:
         category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
     return render_template('pages/placeholder.home.html', context=categories)
+
+@app.route('/redcarpet')
+def red_carpet():
+    red_carpet_data = reader.get_current_red_carpet()
+    # best_dressed = red_carpet_data['red_carpet']
+    # worst_dressed = red_carpet_data['worst_dressed']
+    return render_template('pages/placeholder.redcarpet.html', context=red_carpet_data)
+
+@app.route('/parties')
+def parties():
+    parties = reader.get_current_parties()
+    return render_template('pages/placeholder.parties.html', context=parties)
 
 
 @app.route('/about')
