@@ -55,7 +55,7 @@ def read(tweets='../data/goldenglobes2015.json'):
 
     return
 
-def parse(tweets='data/goldenglobes2015.json'):
+def parse(tweets='../data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
     parties = []
@@ -63,7 +63,9 @@ def parse(tweets='data/goldenglobes2015.json'):
     line = f.readline()
     while(line != ''):
         tweet = json.loads(line)
-        tweet_string = tweet["text"]
+        # pp.pprint(tweet["text"])
+        tweet_string = tweet['text']
+        
         nominee = is_useful_tweet(tweet_string)
         if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
