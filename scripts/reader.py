@@ -82,6 +82,7 @@ def init(tweets):
     if (INTERRUPT):
         INTERRUPT.set()
         time.sleep(1)
+        INTERRUPT.clear()
 
     if tweets[len(tweets) - 6] == '3':
         MODE = 2013
