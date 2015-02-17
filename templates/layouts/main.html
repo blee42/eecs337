@@ -92,6 +92,10 @@
       <div class="page-header text-center">
         <h1>Live Leader Aggregator</h1>
         <h3>
+          <a href="{{ url_for('dataset', corpus='gg2013.json') }}"><span>2013 Stream</span></a>  |   
+          <a href="{{ url_for('dataset', corpus='goldenglobes2015.json') }}"><span>2015 Stream</span></a>
+        </h3>
+        <h3>
           <a href="{{ url_for('red_carpet') }}"><span>Red Carpet</span></a>  |   
           <a href="{{ url_for('home') }}"><span>Main Event</span></a>    |     
           <a href="{{ url_for('parties') }}"><span>Parties</span></a>
