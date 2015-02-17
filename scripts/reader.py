@@ -16,6 +16,7 @@ pp = pprint.PrettyPrinter()
 negStrings = ["afraid", "angry", "annoyed", "anxious", "arrogant", "ashamed", "awful", "bad", "bewildered", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "fierce", "foolish", "frantic", "frightened", "grieving", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "nervous", "obnoxious", "outrageous", "panicky", "repulsive", "safe", "scared", "shy", "sleepy", "sore", "strange", "tense", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
 posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "innocent", "jolly", "kind", "lively", "lovely", "lucky", "obedient", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
 wishStrings = ["hope", "hoping", "if", "luck"]
+presentStrings = ["presenting", "present", "presented", "presenter"]
 punct = ["!", ",", ".", "&", "@", "#", "-", "'"]
 nominees = []
 categories = nominee_scraper.main()
@@ -49,7 +50,7 @@ def init():
     global nominees
     nominees = get_nominees(categories)
 
-def read(tweets='../data/goldenglobes2015.json'):
+def read(tweets='data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
     while(1):
@@ -59,7 +60,7 @@ def read(tweets='../data/goldenglobes2015.json'):
 
     return
 
-def parse(tweets='data/goldenglobes2015.json'):
+def parse(tweets='../data/goldenglobes2015.json'):
     f = open(tweets, 'r')
 
     count = 0
@@ -68,11 +69,15 @@ def parse(tweets='data/goldenglobes2015.json'):
         tweet = json.loads(line)
         tweet_string = tweet["text"]
         
-        # WINNERS
         nominee = is_useful_tweet(tweet_string)
         if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
+
+        presenter = is_presenter_tweet(tweet_string)
+        if  is_presenterList(tweet_string.lower()):
+            if presenter in tweet_string:
+                pp.pprint(presenter)
 
         # RED CARPET
         if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
@@ -238,6 +243,21 @@ def is_a_party(tweet):
         if partyString in tweet:
             return True
             
+    return False
+
+def is_presenter_tweet(tweet):
+    if is_retweet(tweet):
+        return False
+
+    for presenter in presenters:
+        if presenter in tweet:
+            return presenter
+    return False
+
+def is_presenterList(tweet):
+    for word in presentStrings:
+        if word in tweet:
+            return True
     return False
 
 def is_red_carpet(tweet):

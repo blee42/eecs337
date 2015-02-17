@@ -37,8 +37,7 @@ If you see errors involving not having the correct nltk resources, then open up 
   >>> nltk.download()
   ```
 This will open a window called the 'NLTK Downloader'. Make sure you have the following installed:
-  Corpora -> stopwords
-  Models -> maxent_treebank_pos
+  Corpora -> stopwords and Models -> maxent_treebank_pos
 
 
 If you want to debug and run one script, use the following procedures.
