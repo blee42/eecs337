@@ -74,7 +74,7 @@ def parse(tweets='../data/goldenglobes2015.json'):
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
 
-        prsenter = is_presenter_tweet(tweet_string)
+        presenter = is_presenter_tweet(tweet_string)
         if  is_presenterList(tweet_string.lower()):
             if presenter in tweet_string:
                 pp.pprint(presenter)
@@ -249,7 +249,7 @@ def is_presenter_tweet(tweet):
     if is_retweet(tweet):
         return False
 
-    for presenter in prsenters:
+    for presenter in presenters:
         if presenter in tweet:
             return presenter
     return False
