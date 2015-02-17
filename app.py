@@ -2,12 +2,14 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 # from flask.ext.sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
 from forms import *
 from scripts import reader
+
+TWEET_STREAM = 'data/goldenglobes2015.json'
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -16,7 +18,7 @@ from scripts import reader
 app = Flask(__name__)
 app.config.from_object('config')
 categories = reader.categories
-reader.run()
+reader.run(TWEET_STREAM)
 #db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
@@ -85,6 +87,12 @@ def register():
 def forgot():
     form = ForgotForm(request.form)
     return render_template('forms/forgot.html', form=form)
+
+@app.route('/dataset/<corpus>')
+def dataset(corpus):
+    reader.run('data/' + corpus)
+    return redirect(url_for('home'))
+
 
 # Error handlers.
 
