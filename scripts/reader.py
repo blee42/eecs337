@@ -19,12 +19,13 @@ wishStrings = ["hope", "hoping", "if", "luck"]
 presentStrings = ["presenting", "present", "presented", "presenter"]
 punct = ["!", ",", ".", "&", "@", "#", "-", "'"]
 nominees = []
-categories = nominee_scraper.main()
+categories = nominee_scraper.get2015()
 parties = []
 best_dressed = {}
 worst_dressed = {}
-
 stop_words = nltk.corpus.stopwords.words('english')
+
+MODE = 2015
 
 def main():
     thread = run()
@@ -38,17 +39,31 @@ def main():
 
     thread.join()
 
-def run():
-    init()
-    thread = Thread(target=parse, args={})
+def run(tweets='data/goldenglobes2015.json'):
+    init(tweets)
+    thread = Thread(target=parse, args={tweets})
     thread.daemon = True
     thread.start()
 
     return thread
 
-def init():
+def init(tweets):
+
+    global MODE
+    global categories
+
+    if tweets[len(tweets) - 6] == '3':
+        MODE = 2013
+        categories = nominee_scraper.get2013()
+    else:
+        MODE = 2015
+        categories = nominee_scraper.get2015()
+
+
+
     global nominees
     nominees = get_nominees(categories)
+
 
 def read(tweets='data/goldenglobes2015.json'):
     f = open(tweets, 'r')
@@ -60,24 +75,29 @@ def read(tweets='data/goldenglobes2015.json'):
 
     return
 
-def parse(tweets='../data/goldenglobes2015.json'):
+def parse(tweets):
     f = open(tweets, 'r')
 
-    count = 0
-    line = f.readline()
-    while(line != ''):
-        tweet = json.loads(line)
-        tweet_string = tweet["text"]
+    if MODE == 2013:
+        f = eval(f.readline())
+
+    for line in f:
+
+        if MODE == 2015:
+            tweet = json.loads(line)
+            tweet_string = tweet["text"]
+        else:
+            tweet_string = line["text"]
         
         nominee = is_useful_tweet(tweet_string)
         if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
 
-        presenter = is_presenter_tweet(tweet_string)
-        if  is_presenterList(tweet_string.lower()):
-            if presenter in tweet_string:
-                pp.pprint(presenter)
+        # presenter = is_presenter_tweet(tweet_string)
+        # if  is_presenterList(tweet_string.lower()):
+        #     if presenter in tweet_string:
+        #         pp.pprint(presenter)
 
         # RED CARPET
         if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
@@ -151,7 +171,7 @@ def parse(tweets='../data/goldenglobes2015.json'):
         #     sys.stdout.flush()
         # count+=1
 
-        line = f.readline()
+        # line = f.readline()
 
     return
 
@@ -186,15 +206,15 @@ def get_current_parties():
     return parties
 
 def get_nominees(categories):
-    nominees = []
+    nominee_list = []
     for category in categories:
         for nominee in category["nominees"]:
             if nominee['name'] not in categories:
                 # remove "," to remove movie title
                 if ", " in nominee['name']:
                     nominee['name'] = nominee['name'][:nominee['name'].index(",")]
-                nominees.append(nominee['name'])
-    return nominees
+                nominee_list.append(nominee['name'])
+    return nominee_list
 
 def get_mentioned_nominees(tweet):
     mentioned = []
