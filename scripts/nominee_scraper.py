@@ -1,36 +1,25 @@
+import pprint
 import bs4
 import urllib2
 
 hosts = ['Tina Fey', 'Amy Poehler']
 NOMINEES2013_URL = 'http://www.theguardian.com/film/2012/dec/13/golden-globes-2013-nominations-list'
 NOMINEES2015_URL = 'http://www.theguardian.com/film/2015/jan/11/2015-golden-globes-full-list-nominations'
-categories = []
 
 def read_page(url):
     res = urllib2.urlopen(url)
     return res.read()
 
+def pretty_test():
+    pp = pprint.PrettyPrinter()
+    pp.pprint(get2015())
+    pp.pprint(get2013())
+
 def get2015():
     html = read_page(NOMINEES2015_URL)
     soup = bs4.BeautifulSoup(html)
 
-    global categories
     categories = []
-    categories = get_2015categories(soup)
-
-    return categories
-
-def get2013():
-    html = read_page(NOMINEES2013_URL)
-    soup = bs4.BeautifulSoup(html)
-
-    global categories
-    categories = []
-    categories = get_2013categories(soup)
-
-    return categories
-    
-def get_2015categories(soup):
     for category in soup.find_all('strong'): # each strong tag indicates a category
         if category.contents[0] == 'Television': # random header halfway down page
             continue
@@ -40,7 +29,7 @@ def get_2015categories(soup):
         entry['presenters'] = []
 
         for child in category.parent.next_sibling.next_sibling.children:
-            if type(child) is not bs4.element.Tag: # not a <br/>
+            if type(child) is not bs4.element.Tag: # e.g. not a <br/>
                 nominee = {}
                 nominee['name'] = child
                 nominee['score'] = 0
@@ -50,17 +39,22 @@ def get_2015categories(soup):
 
     return categories
 
-def get_2013categories(soup):
-    for category in soup.find_all('h2'): # each strong tag indicates a category
+
+def get2013():
+    html = read_page(NOMINEES2013_URL)
+    soup = bs4.BeautifulSoup(html)
+
+    categories = []
+    for category in soup.find_all('h2'): # each h2 tag indicates a category
         entry = {}
         entry['category'] = category.contents[0]
         entry['nominees'] = []
         entry['presenters'] = []
 
-        carryover = "{0}"
+        # lots of ugly scraping details
+        carryover = "{0}" # some entries are [plaintext][link]
         category_name = category.contents[0]
         for child in category.next_sibling.next_sibling.children:
-            # necessary ugly scrapping details...
             if (category_name == 'Best original song' and type(child) is bs4.element.NavigableString):
                 nominee = {}
                 nominee['name'] = child.string.split(' (')[0].strip("'")
@@ -89,10 +83,6 @@ def get_2013categories(soup):
 
     return categories
 
-import pprint
-p = pprint.PrettyPrinter()
-p.pprint(get2013())
-
 def get_names_from_twitter(array):
     base_url = "https://twitter.com/"
 
@@ -117,5 +107,6 @@ def get_names_from_twitter(array):
         for name_element in soup.find_all("a", { "class" : "ProfileHeaderCard-nameLink" }):
             print twitter_id
             print name_element.getText()
+
 def get_hosts():
     return hosts
