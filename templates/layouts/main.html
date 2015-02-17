@@ -98,7 +98,8 @@
         <h3>
           <a href="{{ url_for('red_carpet') }}"><span>Red Carpet</span></a>  |   
           <a href="{{ url_for('home') }}"><span>Main Event</span></a>    |     
-          <a href="{{ url_for('parties') }}"><span>Parties</span></a>
+          <a href="{{ url_for('parties') }}"><span>Parties</span></a>    |
+          <a href="{{ url_for('sentiments') }}"><span>Sentiments</span></a>
         </h3>
       </div>
       {% block content %}{% endblock %}
@@ -109,7 +110,7 @@
 
   <div id="footer">
     <div class="container">
-      <p>Your Company &copy; All Rights Reserved.</p>
+      <p>EECS 337: NLP. Kevin Chen, Brittany Lee, Kevin Broh-Kahn, Bhavita Jaiswal &copy; All Rights Reserved.</p>
       {% block footer %}{% endblock %}
     </div>
   </div>

@@ -8,6 +8,7 @@ import sys
 import os
 import sys
 import time
+import timeit
 
 #### DEBUG ####
 pp = pprint.PrettyPrinter()
@@ -20,8 +21,10 @@ INTERRUPT = False
 #### KEYWORD STRINGS ####
 winStrings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
 loseStrings = ['lose', 'losing', 'lost']
-negStrings = ["afraid", "angry", "annoyed", "anxious", "arrogant", "ashamed", "awful", "bad", "bewildered", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "fierce", "foolish", "frantic", "frightened", "grieving", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "nervous", "obnoxious", "outrageous", "panicky", "repulsive", "safe", "scared", "shy", "sleepy", "sore", "strange", "tense", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
-posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "innocent", "jolly", "kind", "lively", "lovely", "lucky", "obedient", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
+negStrings = ["afraid", "angry", "annoyed", "ashamed", "awful", "bad", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "fierce", "foolish", "frantic", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "nervous", "obnoxious", "outrageous", "panicky", "repulsive", "safe", "scared", "shy", "sleepy", "sore", "strange", "tense", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
+posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "congrats", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "innocent", "jolly", "kind", "lively", "lovely", "lucky", "obedient", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
+# negStrings = []
+# posStrings = []
 wishStrings = ["hope", "hoping", "if", "luck"]
 presentStrings = ["presenting", "present", "presented", "presenter"]
 
@@ -35,6 +38,7 @@ categories = []
 parties = []
 best_dressed = {}
 worst_dressed = {}
+sentiments = {}
 
 ##############################
 ######### THREADING ##########
@@ -63,10 +67,13 @@ def init(tweets):
     global MODE
     global categories
     global nominees
+    global sentiments
+    # global negStrings
+    # global posStrings
     
     if (INTERRUPT):
         INTERRUPT.set()
-        time.sleep(3)
+        time.sleep(1)
 
     if tweets[len(tweets) - 6] == '3':
         MODE = 2013
@@ -76,9 +83,22 @@ def init(tweets):
         categories = nominee_scraper.get2015()
 
     nominees = get_nominees(categories)
+    sentiments['upvote'] = 0
+    sentiments['downvote'] = 0
+    # negStrings = get_strings('scripts/negativewords')
+    # posStrings = get_strings('scripts/positivewords')
+
+def get_strings(fn):
+    f = open(fn)
+
+    words = []
+    for line in f:
+        words.append(line.lower().strip('\n'))
+
+    return words
 
 ##############################
-###### READ DATA STREAMS######
+###### READ DATA STREAMS #####
 ##############################
 
 def read_stream(tweets):
@@ -90,7 +110,6 @@ def read_stream(tweets):
             break
         # print_current_winners()
         pp.pprint(categories)
-
     thread.join()
 
 def read2015(tweets='../data/goldenglobes2015.json'):
@@ -122,6 +141,7 @@ def read2013(tweets='../data/gg2013.json'):
 ##############################
 
 def parse(tweets):
+    start = timeit.default_timer()
     f = open(tweets, 'r')
 
     if MODE == 2013:
@@ -139,78 +159,87 @@ def parse(tweets):
         else:
             tweet_string = line["text"]
         
+    
         # WINNERS
         nominee = is_useful_tweet(tweet_string)
         if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
 
-        # RED CARPET
-        if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
-            tokens = tweet_string.split()
-            tagged_tokens = nltk.pos_tag(tokens)
+        if not is_retweet(tweet_string):
+            # RED CARPET
+            if is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
+                tokens = tweet_string.split()
+                tagged_tokens = nltk.pos_tag(tokens)
 
-            for tok in xrange(0,len(tagged_tokens)-1,2):
-                flag = False
-                for word in stop_words:
-                    if word == tagged_tokens[tok][0]:
-                        flag = True
+                for tok in xrange(0,len(tagged_tokens)-1,2):
+                    flag = False
+                    for word in stop_words:
+                        if word == tagged_tokens[tok][0]:
+                            flag = True
 
-                if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
-                    continue
+                    if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
+                        continue
 
-                if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
-                    continue
+                    if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
+                        continue
 
-                for symbol in punct:
-                    if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
-                        flag = True
+                    for symbol in punct:
+                        if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
+                            flag = True
 
-                if flag:
-                    continue
+                    if flag:
+                        continue
 
-                if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
-                    name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
-                    if name in best_dressed.keys():
-                        best_dressed[name] += 1
-                    else:
-                        best_dressed[name] = 1
+                    if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
+                        name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
+                        if name in best_dressed.keys():
+                            best_dressed[name] += 1
+                        else:
+                            best_dressed[name] = 1
 
-        if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_worst_dressed(tweet_string):
-            tokens = tweet_string.split()
-            tagged_tokens = nltk.pos_tag(tokens)
+            if is_red_carpet(tweet_string) and is_worst_dressed(tweet_string):
+                tokens = tweet_string.split()
+                tagged_tokens = nltk.pos_tag(tokens)
 
-            for tok in xrange(0,len(tagged_tokens)-1,2):
-                flag = False
-                for word in stop_words:
-                    if word == tagged_tokens[tok][0]:
-                        flag = True
+                for tok in xrange(0,len(tagged_tokens)-1,2):
+                    flag = False
+                    for word in stop_words:
+                        if word == tagged_tokens[tok][0]:
+                            flag = True
 
-                if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
-                    continue
+                    if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
+                        continue
 
-                if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
-                    continue
+                    if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
+                        continue
 
-                for symbol in punct:
-                    if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
-                        flag = True
-                if flag:
-                    continue
+                    for symbol in punct:
+                        if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
+                            flag = True
+                    if flag:
+                        continue
 
-                if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
-                    name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
-                    if name in worst_dressed.keys():
-                        worst_dressed[name] += 1
-                    else:
-                        worst_dressed[name] = 1
+                    if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
+                        name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
+                        if name in worst_dressed.keys():
+                            worst_dressed[name] += 1
+                        else:
+                            worst_dressed[name] = 1
 
-        # PARTY
-        if not is_retweet(tweet_string) and is_a_party(tweet_string):
-            for word in tweet_string.split(" "):
-                if word[:1] == "@":
-                    if not word == "@" and not word == "@goldenglobes":
-                        parties.append(word.lower())
+            # PARTY
+            if is_a_party(tweet_string):
+                for word in tweet_string.split(" "):
+                    if word[:1] == "@":
+                        if not word == "@" and not word == "@goldenglobes":
+                            parties.append(word.lower())
+
+            # SENTIMENT
+            if not is_wishful_tweet(tweet_string.lower()):
+                if is_happy_tweet(tweet_string.lower()):
+                    sentiments['upvote'] += 1
+                elif is_sad_tweet(tweet_string.lower()):
+                    sentiments['downvote'] += 1
 
         # if count%100000 == 0:
         #     print '\rCount: ',count,
@@ -218,6 +247,7 @@ def parse(tweets):
         # count+=1
 
     print 'Finished parsing all {0} data.'.format(str(MODE))
+    print 'Took {0} seconds.'.format(timeit.default_timer() - start)
 
     while True:
         time.sleep(100000)
@@ -245,11 +275,17 @@ def update_relevant_categories(mentioned):
 ### RETRIEVE TRACKED DATA ####
 ##############################
 
+def get_current_winners():
+    return categories
+
 def get_current_red_carpet():
     return { 'best_dressed': best_dressed, 'worst_dressed': worst_dressed }
 
 def get_current_parties():
     return parties
+
+def get_current_sentiments():
+    return sentiments
 
 def get_nominees(categories):
     nominee_list = []
@@ -290,17 +326,32 @@ def is_useful_tweet(tweet):
     return False
 
 def is_wishful_tweet(tweet):
-    for word in wishStrings:
-        if word in tweet:
-            return True
+    # for word in wishStrings:
+    #     if word in tweet:
+    #         return True
+    # return False
+    if any([i in tweet for i in wishStrings]):
+        return True
+    return False
+
+def is_happy_tweet(tweet):
+    if any([i in tweet for i in posStrings]):
+        return True
+    return False
+
+def is_sad_tweet(tweet):
+    if any([i in tweet for i in negStrings]):
+        return True
     return False
 
 def is_a_party(tweet):
     partyStrings = ["parties", "party"];
-    
-    for partyString in partyStrings:
-        if partyString in tweet:
-            return True
+
+    if any([i in tweet for i in partyStrings]):
+        return True    
+    # for partyString in partyStrings:
+    #     if partyString in tweet:
+    #         return True
             
     return False
 
@@ -321,23 +372,20 @@ def is_presenterList(tweet):
 
 def is_red_carpet(tweet):
     redCarpetStrings = ['redcarpet', 'RedCarpet']
-    for word in redCarpetStrings:
-        if word in tweet:
-            return True
+    if any([i in tweet for i in redCarpetStrings]):
+        return True
     return False
 
 def is_best_dressed(tweet):
     bestDressedStrings = ['bestdressed', 'BestDressed']
-    for word in bestDressedStrings:
-        if word in tweet:
-            return True
+    if any([i in tweet for i in bestDressedStrings]):
+        return True
     return False
 
 def is_worst_dressed(tweet):
     worstDressedStrings = ['worstdressed', 'WorstDressed']
-    for word in worstDressedStrings:
-        if word in tweet:
-            return True
+    if any([i in tweet for i in worstDressedStrings]):
+        return True
     return False
 
 ##############################
@@ -358,11 +406,6 @@ def print_current_winners():
         print bcolors.OKBLUE + '[SCORE] ' + bcolors.ENDC, 
         print category['nominees'][0]['score']
         print ''
-    return categories
-
-def get_current_winners():
-    # for category in categories:
-    #     category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
     return categories
 
 # read_stream('../data/goldenglobes2015.json')
