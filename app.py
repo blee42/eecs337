@@ -18,7 +18,6 @@ TWEET_STREAM = 'data/goldenglobes2015.json'
 app = Flask(__name__)
 app.config.from_object('config')
 categories = reader.categories
-reader.run(TWEET_STREAM)
 #db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
@@ -74,6 +73,10 @@ def presenters():
     presenters = reader.get_presenters()
     return render_template('pages/placeholder.presenters.html', context=presenters)
 
+@app.route('/sentiment')
+def sentiments():
+    sentiments = reader.get_current_sentiments()
+    return render_template('pages/placeholder.sentiments.html', context=sentiments)
 
 @app.route('/about')
 def about():
@@ -125,6 +128,10 @@ if not app.debug:
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('errors')
+
+@app.before_first_request
+def before_first_request():
+    reader.run(TWEET_STREAM)
 
 #----------------------------------------------------------------------------#
 # Launch.
