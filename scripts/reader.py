@@ -7,6 +7,11 @@ import nominee_scraper
 import sys
 import os
 import sys
+import urllib2
+import bs4
+import selenium.webdriver as webdriver
+from pyvirtualdisplay import Display
+
 
 #winStrings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
 #loseStrings = ['lose', 'losing', 'lost']
@@ -23,6 +28,7 @@ categories = nominee_scraper.main()
 parties = []
 best_dressed = {}
 worst_dressed = {}
+red_carpet_photos = {}
 
 stop_words = nltk.corpus.stopwords.words('english')
 
@@ -69,87 +75,78 @@ def parse(tweets='../data/goldenglobes2015.json'):
         tweet = json.loads(line)
         tweet_string = tweet["text"]
         
-        nominee = is_useful_tweet(tweet_string)
-        if "Best" in tweet_string and nominee and "wins" in tweet_string:
-            if not is_wishful_tweet(tweet_string.lower()):
-                process(nominee)
+        # nominee = is_useful_tweet(tweet_string)
+        # if "Best" in tweet_string and nominee and "wins" in tweet_string:
+        #     if not is_wishful_tweet(tweet_string.lower()):
+        #         process(nominee)
 
-        presenter = is_presenter_tweet(tweet_string)
-        if  is_presenterList(tweet_string.lower()):
-            if presenter in tweet_string:
-                pp.pprint(presenter)
+        # # presenter = is_presenter_tweet(tweet_string)
+        # # if  is_presenterList(tweet_string.lower()):
+        # #     if presenter in tweet_string:
+        # #         pp.pprint(presenter)
 
-        # RED CARPET
-        if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
+        # # RED CARPET
+        # if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
+        #     tokens = tweet_string.split()
+        #     tagged_tokens = nltk.pos_tag(tokens)
+        #     get_red_carpet_winners("best", tagged_tokens)
+
+        # if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_worst_dressed(tweet_string):
+        #     tokens = tweet_string.split()
+        #     tagged_tokens = nltk.pos_tag(tokens)
+        #     get_red_carpet_winners("worst", tagged_tokens)
+
+        if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and "http:" in tweet_string:
+            # print "found one"
             tokens = tweet_string.split()
-            tagged_tokens = nltk.pos_tag(tokens)
 
-            for tok in xrange(0,len(tagged_tokens)-1,2):
-                flag = False
-                for word in stop_words:
-                    if word == tagged_tokens[tok][0]:
-                        flag = True
+            for tok in tokens:
+                if "http:" in tok:
+                    url = tok
+                    break
+            if url:
+                if (url[-1] == '"') or (url[-1] == u'\u201d'):
+                    url = url[:-1]
+                url = url.encode('utf-8')
+                try:
+                    hdr = {'User-Agent': 'Mozilla/5.0'}
+                    req = urllib2.Request(url, headers=hdr)
+                    expanded_url = urllib2.urlopen(req).url
 
-                if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
-                    continue
+                    if "instagram" in expanded_url:
+                        display = Display(visible=0, size=(800, 600))
+                        display.start()
+                        
+                        driver = webdriver.Firefox()
+                        driver.get(expanded_url)
+                        soup = bs4.BeautifulSoup(driver.page_source)
+                        div = soup.find('div', {'id':'iImage_0'})
+                        style = div['style']
 
-                if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
-                    continue
+                        img_url = style[21:-2]
 
-                for symbol in punct:
-                    if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
-                        flag = True
+                        print img_url
 
-                if flag:
-                    continue
+                        driver.quit()
+                        display.stop()
 
-                if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
-                    name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
-                    if name in best_dressed.keys():
-                        best_dressed[name] += 1
-                    else:
-                        best_dressed[name] = 1
+                except urllib2.HTTPError, e:
+                    expanded_url = ""
+                    pass
 
-        if not is_retweet(tweet_string) and is_red_carpet(tweet_string) and is_worst_dressed(tweet_string):
-            tokens = tweet_string.split()
-            tagged_tokens = nltk.pos_tag(tokens)
-
-            for tok in xrange(0,len(tagged_tokens)-1,2):
-                flag = False
-                for word in stop_words:
-                    if word == tagged_tokens[tok][0]:
-                        flag = True
-
-                if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
-                    continue
-
-                if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
-                    continue
-
-                for symbol in punct:
-                    if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
-                        flag = True
-                if flag:
-                    continue
-
-                if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
-                    name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
-                    if name in worst_dressed.keys():
-                        worst_dressed[name] += 1
-                    else:
-                        worst_dressed[name] = 1
-
-        # PARTY
-        if not is_retweet(tweet_string) and is_a_party(tweet_string):
-            for word in tweet_string.split(" "):
-                if word[:1] == "@":
-                    if not word == "@" and not word == "@goldenglobes":
-                        parties.append(word.lower())
+            
+        # # PARTY
+        # if not is_retweet(tweet_string) and is_a_party(tweet_string):
+        #     for word in tweet_string.split(" "):
+        #         if word[:1] == "@":
+        #             if not word == "@" and not word == "@goldenglobes":
+        #                 parties.append(word.lower())
 
         # if count%100000 == 0:
         #     print '\rCount: ',count,
         #     sys.stdout.flush()
-        # count+=1
+        print '\rCount: ',count,
+        count+=1
 
         line = f.readline()
 
@@ -204,6 +201,47 @@ def get_mentioned_nominees(tweet):
             mentioned.append(nominee)
 
     return mentioned
+
+def get_red_carpet_winners(category, tagged_tokens):
+    for tok in xrange(0,len(tagged_tokens)-1,2):
+        flag = False
+        for word in stop_words:
+            if word == tagged_tokens[tok][0]:
+                flag = True
+
+        if (tagged_tokens[tok][0] == "Golden") and (tagged_tokens[tok+1][0] == "Globes" or tagged_tokens[tok+1][0] == "Globe"):
+            continue
+
+        if (tagged_tokens[tok][0] == "Red") and (tagged_tokens[tok+1][0] == "Carpet"):
+            continue                
+
+        if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
+            continue
+
+        if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
+            continue
+
+        for symbol in punct:
+            if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
+                flag = True
+
+        if flag:
+            continue
+
+        if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
+            name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
+            
+            if category == "best":
+                if name in best_dressed.keys():
+                    best_dressed[name] += 1
+                else:
+                    best_dressed[name] = 1
+            else:
+                if name in worst_dressed.keys():
+                    worst_dressed[name] += 1
+                else:
+                    worst_dressed[name] = 1
+    return
 
 def update_relevant_categories(mentioned):
     relevant = []
