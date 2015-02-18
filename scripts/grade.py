@@ -1,12 +1,11 @@
 from reader import init, parse, get_current_winners
 import io, json
 
-year = 2013
+year = 2015
 if year == 2015:
     tweets = 'data/goldenglobes2015.json'
 else:
     tweets = 'data/gg2013.json'
-year = 2013
 init(tweets)
 parse(tweets)
 winners = get_current_winners()
