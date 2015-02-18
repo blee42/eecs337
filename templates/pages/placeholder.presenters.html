@@ -2,8 +2,10 @@
 {% block title %}Presenters{% endblock %}
 {% block content %}
 
+<div class="row">
+	<h4 class="pull-right"> Processed: {{ context['counter'] }} tweets </h4><br/>
+</div>
 <div>
-  <h4 class="pull-right"> Processed: {{ context[1] }} tweets </h4><br/>
 	{% for presenter in context %}
   <div class='winners-container'>
     <div class='winners-content'>

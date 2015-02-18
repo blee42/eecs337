@@ -22,6 +22,25 @@ This project is built off of a Flask boilerplate - [https://github.com/mjhea0/fl
   $ pip install -r requirements.txt
   ```
 
+  The dependent libraries include:
+  Fabric==1.8.2
+  Flask==0.10.1
+  Flask-SQLAlchemy==1.0
+  Jinja2==2.7.2
+  MarkupSafe==0.18
+  SQLAlchemy==0.9.3
+  Werkzeug==0.9.4
+  coverage==3.7.1
+  ecdsa==0.10
+  itsdangerous==0.23
+  paramiko==1.12.2
+  pycrypto==2.6.1
+  wsgiref==0.1.2
+  Flask-WTF==0.9.4
+  beautifulsoup4==4.3.2
+  nltk==3.0
+  numpy
+
 4. Ensure that the data jsons are in the data folder.
 
 5. Run the development server:
@@ -46,65 +65,6 @@ If you want to debug and run one script, use the following procedures.
   $ >>> [function name]
   ```
 
-## Team Notes
-2/6/2015 Update:
-Added scraper ("/scripts/gg_scraper.py") for all categories and nominees. `get_categories` will return data in this form:
+## Future Adaptability
+To ensure that our application will work for future Golden Globes ceremonies, we did not hardcode any date or time information into our analysis.  We also strucutred our analysis to be able to take in a stream of tweets to simulate real-time analysis during future ceremonies.  The one area that needs be changed each year, is adjustments to the web scraper which gets the nominee and category information.  Tweaks to the website that we are pulling from may change in future years.
 
-```python
-[
-    {
-        'category': 'award1',
-        'nominees': 
-            [
-                {
-                    'name': 'nominee1',
-                    'score': 0
-                },
-                {
-                    'name': 'nominee2',
-                    'score': 0
-                },
-                '...'
-            ],
-        'presenters':
-            [
-                {
-                  'name': 'presenter1', # populated as we go along
-                  'score': 0
-                },
-                '...'
-            ],
-        '...'
-    },
-
-    {
-        'category': 'award2',
-        'nominees': 
-            [
-                {
-                    'name': 'nominee1',
-                    'score': 0
-                },
-                {
-                    'name': 'nominee2',
-                    'score': 0
-                },
-                '...'
-            ],
-        'presenters':
-            [
-                {
-                  'name': 'presenter1',
-                  'score': 0
-                },
-                '...'
-            ],
-        '...'
-    },
-
-    '...'
-]
-```
-
-2/4/15 Update:
-Added reader function ("/scripts/reader.py") that prints each tweet object.

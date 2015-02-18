@@ -1,6 +1,7 @@
 # Project JSON
 goldenglobes2015.json
-data/*
+data/goldenglobes2015.json
+data/gg2013.json
 
 # Other
 .DS_Store
