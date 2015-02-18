@@ -23,15 +23,27 @@ def get2015():
     for category in soup.find_all('strong'): # each strong tag indicates a category
         if category.contents[0] == 'Television': # random header halfway down page
             continue
+
         entry = {}
-        entry['category'] = category.contents[0]
+        if category.contents[0] == 'Best performance by an actor in comedy series':
+            entry['category'] = 'Best performance by an actor in a television series - comedy or musical'
+        elif category.contents[0] == 'Best performance by an actress in a television series - musical or comedy':
+            entry['category'] = 'Best performance by an actress in a television series - comedy or musical'
+        else:
+            entry['category'] = category.contents[0]
         entry['nominees'] = []
         entry['presenters'] = []
 
         for child in category.parent.next_sibling.next_sibling.children:
             if type(child) is not bs4.element.Tag: # e.g. not a <br/>
                 nominee = {}
-                nominee['name'] = child
+
+                name = child
+                if ' (' in name:
+                    name = name.split(' (')[0]
+                elif u'Alejandro Gonz\xe1lez In\xf1\xe1rritu' in name or u'Alejandro Gonz\xe1lez I\xf1\xe1rritu' in name:
+                    name = 'Alejandro Inarritu Gonzalez'
+                nominee['name'] = name
                 nominee['score'] = 0
                 entry['nominees'].append(nominee)
 

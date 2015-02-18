@@ -1,0 +1,648 @@
+[
+    {
+        "category": "Best motion picture \u2013 drama",
+        "nominees": [
+            {
+                "name": "Boyhood",
+                "score": 763
+            },
+            {
+                "name": "The Theory of Everything",
+                "score": 174
+            },
+            {
+                "name": "Selma",
+                "score": 73
+            },
+            {
+                "name": "The Imitation Game",
+                "score": 1
+            },
+            {
+                "name": "Foxcatcher",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actor in a motion picture \u2013 drama",
+        "nominees": [
+            {
+                "name": "Eddie Redmayne",
+                "score": 161
+            },
+            {
+                "name": "Jake Gyllenhaal",
+                "score": 1
+            },
+            {
+                "name": "Steve Carell",
+                "score": 0
+            },
+            {
+                "name": "Benedict Cumberbatch",
+                "score": 0
+            },
+            {
+                "name": "David Oyelowo",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actress in a motion picture \u2013 drama",
+        "nominees": [
+            {
+                "name": "Julianne Moore",
+                "score": 263
+            },
+            {
+                "name": "Rosamund Pike",
+                "score": 2
+            },
+            {
+                "name": "Felicity Jones",
+                "score": 1
+            },
+            {
+                "name": "Jennifer Aniston",
+                "score": 0
+            },
+            {
+                "name": "Reese Witherspoon",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best motion picture \u2013 comedy or musical",
+        "nominees": [
+            {
+                "name": "The Grand Budapest Hotel",
+                "score": 313
+            },
+            {
+                "name": "Birdman",
+                "score": 220
+            },
+            {
+                "name": "Pride",
+                "score": 1
+            },
+            {
+                "name": "Into the Woods",
+                "score": 0
+            },
+            {
+                "name": "St Vincent",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actor in a motion picture \u2013 comedy or musical",
+        "nominees": [
+            {
+                "name": "Michael Keaton",
+                "score": 60
+            },
+            {
+                "name": "Christoph Waltz",
+                "score": 1
+            },
+            {
+                "name": "Ralph Fiennes",
+                "score": 0
+            },
+            {
+                "name": "Bill Murray",
+                "score": 0
+            },
+            {
+                "name": "Joaquin Phoenix",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actress in a motion picture \u2013 musical or comedy",
+        "nominees": [
+            {
+                "name": "Julianne Moore",
+                "score": 263
+            },
+            {
+                "name": "Amy Adams",
+                "score": 237
+            },
+            {
+                "name": "Helen Mirren",
+                "score": 1
+            },
+            {
+                "name": "Emily Blunt",
+                "score": 0
+            },
+            {
+                "name": "Quvenzhan\u00e9 Wallis",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actress in a supporting role in a motion picture",
+        "nominees": [
+            {
+                "name": "Patricia Arquette",
+                "score": 59
+            },
+            {
+                "name": "Jessica Chastain",
+                "score": 1
+            },
+            {
+                "name": "Meryl Streep",
+                "score": 1
+            },
+            {
+                "name": "Keira Knightley",
+                "score": 0
+            },
+            {
+                "name": "Emma Stone",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actor in a supporting role in a motion picture",
+        "nominees": [
+            {
+                "name": "JK Simmons",
+                "score": 51
+            },
+            {
+                "name": "Ethan Hawke",
+                "score": 1
+            },
+            {
+                "name": "Robert Duvall",
+                "score": 0
+            },
+            {
+                "name": "Edward Norton",
+                "score": 0
+            },
+            {
+                "name": "Mark Ruffalo",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best director",
+        "nominees": [
+            {
+                "name": "Richard Linklater",
+                "score": 26
+            },
+            {
+                "name": "Wes Anderson",
+                "score": 11
+            },
+            {
+                "name": "Ava DuVernay",
+                "score": 0
+            },
+            {
+                "name": "David Fincher",
+                "score": 0
+            },
+            {
+                "name": "Alejandro Inarritu Gonzalez",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best screenplay",
+        "nominees": [
+            {
+                "name": "Richard Linklater",
+                "score": 26
+            },
+            {
+                "name": "Wes Anderson",
+                "score": 11
+            },
+            {
+                "name": "Gillian Flynn",
+                "score": 0
+            },
+            {
+                "name": "Alejandro Inarritu Gonzalez",
+                "score": 0
+            },
+            {
+                "name": "Graham Moore",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best foreign language film",
+        "nominees": [
+            {
+                "name": "Leviathan",
+                "score": 70
+            },
+            {
+                "name": "Ida",
+                "score": 1
+            },
+            {
+                "name": "Force Majeure Turist",
+                "score": 0
+            },
+            {
+                "name": "Gett: The Trial of Viviane",
+                "score": 0
+            },
+            {
+                "name": "Tangerines Madanriinid",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best animated feature film",
+        "nominees": [
+            {
+                "name": "How to Train Your Dragon 2",
+                "score": 94
+            },
+            {
+                "name": "Big Hero 6",
+                "score": 2
+            },
+            {
+                "name": "The Book of Life",
+                "score": 0
+            },
+            {
+                "name": "The Boxtrolls",
+                "score": 0
+            },
+            {
+                "name": "The Lego Movie",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best original song",
+        "nominees": [
+            {
+                "name": "Glory",
+                "score": 30
+            },
+            {
+                "name": "Big Eyes",
+                "score": 4
+            },
+            {
+                "name": "Mercy Is",
+                "score": 0
+            },
+            {
+                "name": "Opportunity",
+                "score": 0
+            },
+            {
+                "name": "Yellow Flicker Beat",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best original score",
+        "nominees": [
+            {
+                "name": "Johann Johannsson",
+                "score": 4
+            },
+            {
+                "name": "Alexandre Desplat",
+                "score": 0
+            },
+            {
+                "name": "Trent Reznor & Atticus Ross",
+                "score": 0
+            },
+            {
+                "name": "Antonio Sanchez",
+                "score": 0
+            },
+            {
+                "name": "Hans Zimmer",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best television series \u2013 drama",
+        "nominees": [
+            {
+                "name": "The Affair",
+                "score": 218
+            },
+            {
+                "name": "House of Cards",
+                "score": 86
+            },
+            {
+                "name": "Downton Abbey",
+                "score": 66
+            },
+            {
+                "name": "Game of Thrones",
+                "score": 0
+            },
+            {
+                "name": "The Good Wife",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actor in a television series \u2013 drama",
+        "nominees": [
+            {
+                "name": "Kevin Spacey",
+                "score": 195
+            },
+            {
+                "name": "Dominic West",
+                "score": 27
+            },
+            {
+                "name": "Clive Owen",
+                "score": 0
+            },
+            {
+                "name": "Liev Schreiber",
+                "score": 0
+            },
+            {
+                "name": "James Spader",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actress in a television series \u2013 drama",
+        "nominees": [
+            {
+                "name": "Ruth Wilson",
+                "score": 67
+            },
+            {
+                "name": "Viola Davis",
+                "score": 1
+            },
+            {
+                "name": "Julianna Margulies",
+                "score": 1
+            },
+            {
+                "name": "Claire Danes",
+                "score": 0
+            },
+            {
+                "name": "Robin Wright",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best television series \u2013 comedy",
+        "nominees": [
+            {
+                "name": "Transparent",
+                "score": 279
+            },
+            {
+                "name": "Jane the Virgin",
+                "score": 45
+            },
+            {
+                "name": "Silicon Valley",
+                "score": 2
+            },
+            {
+                "name": "Orange Is the New Black",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actor in a television series - comedy or musical",
+        "nominees": [
+            {
+                "name": "Louis CK",
+                "score": 0
+            },
+            {
+                "name": "Don Cheadle",
+                "score": 0
+            },
+            {
+                "name": "Ricky Gervais",
+                "score": 0
+            },
+            {
+                "name": "William H Macy",
+                "score": 0
+            },
+            {
+                "name": "Jefferey Tambor",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actress in a television series - comedy or musical",
+        "nominees": [
+            {
+                "name": "Gina Rodriguez",
+                "score": 117
+            },
+            {
+                "name": "Lena Dunham",
+                "score": 0
+            },
+            {
+                "name": "Edie Falco",
+                "score": 0
+            },
+            {
+                "name": "Julia Louis-Dreyfus",
+                "score": 0
+            },
+            {
+                "name": "Taylor Schilling",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actress in a miniseries or motion picture made for television",
+        "nominees": [
+            {
+                "name": "Maggie Gyllenhaal",
+                "score": 82
+            },
+            {
+                "name": "Frances McDormand",
+                "score": 1
+            },
+            {
+                "name": "Jessica Lange",
+                "score": 0
+            },
+            {
+                "name": "Frances O\u2019Connor",
+                "score": 0
+            },
+            {
+                "name": "Allison Tolman",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actor in a miniseries or motion picture made for television",
+        "nominees": [
+            {
+                "name": "Billy Bob Thornton",
+                "score": 74
+            },
+            {
+                "name": "Matthew McConaughey",
+                "score": 3
+            },
+            {
+                "name": "Martin Freeman",
+                "score": 0
+            },
+            {
+                "name": "Woody Harrelson",
+                "score": 0
+            },
+            {
+                "name": "Mark Ruffalo",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actress in a supporting role in a series, miniseries or motion picture made for television",
+        "nominees": [
+            {
+                "name": "Joanne Froggatt",
+                "score": 44
+            },
+            {
+                "name": "Uzo Aduba",
+                "score": 0
+            },
+            {
+                "name": "Kathy Bates",
+                "score": 0
+            },
+            {
+                "name": "Allison Janney",
+                "score": 0
+            },
+            {
+                "name": "Michelle Monaghan",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best performance by an actor in a supporting role in a series, miniseries or motion picture made for television",
+        "nominees": [
+            {
+                "name": "Matt Bomer",
+                "score": 88
+            },
+            {
+                "name": "Alan Cumming",
+                "score": 0
+            },
+            {
+                "name": "Colin Hanks",
+                "score": 0
+            },
+            {
+                "name": "Bill Murray",
+                "score": 0
+            },
+            {
+                "name": "Jon Voight",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    },
+    {
+        "category": "Best miniseries or motion picture made for television",
+        "nominees": [
+            {
+                "name": "Fargo ",
+                "score": 85
+            },
+            {
+                "name": "The Normal Heart",
+                "score": 9
+            },
+            {
+                "name": "True Detective",
+                "score": 1
+            },
+            {
+                "name": "The Missing",
+                "score": 0
+            },
+            {
+                "name": "Olive Kitteridge",
+                "score": 0
+            }
+        ],
+        "presenters": []
+    }
+]

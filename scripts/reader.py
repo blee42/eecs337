@@ -247,10 +247,9 @@ def parse(tweets):
                     sentiments['downvote'] += 1
 
 
-        # if count%10000 == 0:
-        #     print '\rCount: ',count,
-        #     sys.stdout.flush()
-        # count+=1
+        if COUNTER%10000 == 0:
+            print '\rCount: ',COUNTER,
+            sys.stdout.flush()
         COUNTER += 1
 
     print 'Finished parsing all {0} data.'.format(str(MODE))
@@ -552,8 +551,8 @@ def print_current_winners():
     return categories
 
 def get_current_winners():
-    # for category in categories:
-    #     category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
+    for category in categories:
+        category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
     return categories
 
 # def get_presenters():
