@@ -7,11 +7,16 @@ import nominee_scraper
 import sys
 import os
 import sys
+# import urllib2
+# import bs4
+# import selenium.webdriver as webdriver
+# from pyvirtualdisplay import Display
 from nltk import sent_tokenize, word_tokenize, pos_tag, ne_chunk
 from nltk.tokenize import SpaceTokenizer
 from nltk.tokenize import TreebankWordTokenizer
 import pdb
 import time
+import copy
 import timeit
 
 #### DEBUG ####
@@ -21,6 +26,7 @@ pp = pprint.PrettyPrinter()
 MODE = 2015
 RUNNING_THREAD = False
 INTERRUPT = False
+COUNTER = 0
 
 #### KEYWORD STRINGS ####
 win_strings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
@@ -28,7 +34,7 @@ lose_strings = ['lose', 'losing', 'lost']
 neg_strings = ["afraid", "angry", "annoyed", "ashamed", "awful", "bad", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "foolish", "frantic", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "obnoxious", "outrageous", "panicky", "repulsive", "scared", "shy", "sleepy","strange", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
 pos_strings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "congrats", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "jolly", "kind", "lively", "lovely", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
 wish_strings = ["hope", "hoping", "if", "luck"]
-present_strings = ["presenting", "present", "presented", "presenter"]
+present_strings = ["presenting", "present", "presented", "presenter", "presents"]
 
 #### TOOL LISTS ####
 work_tokenizer= TreebankWordTokenizer()
@@ -40,6 +46,7 @@ stop_list= ["Golden", "Globe" , "GOLDEN" , "GLOBE" , "Actress" , "TV" , "Drama" 
 nominees = []
 categories = []
 parties = []
+presenters = []
 best_dressed = {}
 worst_dressed = {}
 sentiments = {}
@@ -164,7 +171,8 @@ def parse(tweets):
         f = eval(f.readline())
         sys.stdout.flush()
 
-    # count = 0
+    global COUNTER
+    COUNTER = 0
     for line in f:
         if (INTERRUPT.is_set()):
             break;
@@ -174,26 +182,39 @@ def parse(tweets):
             tweet_string = tweet["text"]
         else:
             tweet_string = line["text"]
-        
-    
+
         # WINNERS
         nominee = is_useful_tweet(tweet_string)
         if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
+        
+
+        # Presenter code
+
+        # if not is_retweet(tweet_string) and is_presents(tweet_string):
+        #     tokens = tweet_string.split()
+        #     pos_tokens = copy.deepcopy(tokens)
+        #     if "Best" in tokens:
+        #         index = tokens.index("Best")
+        #         category = tokens[index::3]
+        #         tagged_tokens = nltk.pos_tag(pos_tokens)
+        #         name = get_name("presents", tagged_tokens)
+        #         if name:
+        #             process_presenters(name, category)
+        #             # print presenters
 
 
-        if  is_presenterList(tweet_string.lower()):
-           
-            if "best" in tweet_string.lower():
-                name = extract_name(tweet_string)
-                val=0
-                for word in name:
-                    key=word
-                    if key in presenter_dict:
-                        presenter_dict[key]+=1
-                    else:
-                        presenter_dict[key]=1
+        # if  is_presenterList(tweet_string.lower()):
+            # if "best" in tweet_string.lower():
+            #     name = extract_name(tweet_string)
+            #     val=0
+            #     for word in name:
+            #         key=word
+            #         if key in presenter_dict:
+            #             presenter_dict[key]+=1
+            #         else:
+            #             presenter_dict[key]=1
 
         if not is_retweet(tweet_string):
 
@@ -201,61 +222,12 @@ def parse(tweets):
             if is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
                 tokens = tweet_string.split()
                 tagged_tokens = nltk.pos_tag(tokens)
-
-                for tok in xrange(0,len(tagged_tokens)-1,2):
-                    flag = False
-                    for word in stop_words:
-                        if word == tagged_tokens[tok][0]:
-                            flag = True
-
-                    if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
-                        continue
-
-                    if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
-                        continue
-
-                    for symbol in punct:
-                        if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
-                            flag = True
-
-                    if flag:
-                        continue
-
-                    if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
-                        name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
-                        if name in best_dressed.keys():
-                            best_dressed[name] += 1
-                        else:
-                            best_dressed[name] = 1
+                get_name("best", tagged_tokens)
 
             if is_red_carpet(tweet_string) and is_worst_dressed(tweet_string):
                 tokens = tweet_string.split()
                 tagged_tokens = nltk.pos_tag(tokens)
-
-                for tok in xrange(0,len(tagged_tokens)-1,2):
-                    flag = False
-                    for word in stop_words:
-                        if word == tagged_tokens[tok][0]:
-                            flag = True
-
-                    if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
-                        continue
-
-                    if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
-                        continue
-
-                    for symbol in punct:
-                        if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
-                            flag = True
-                    if flag:
-                        continue
-
-                    if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
-                        name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
-                        if name in worst_dressed.keys():
-                            worst_dressed[name] += 1
-                        else:
-                            worst_dressed[name] = 1
+                get_name("worst", tagged_tokens)
 
             # PARTY
             if is_a_party(tweet_string):
@@ -279,6 +251,7 @@ def parse(tweets):
         #     print '\rCount: ',count,
         #     sys.stdout.flush()
         # count+=1
+        COUNTER += 1
 
     print 'Finished parsing all {0} data.'.format(str(MODE))
     print 'Took {0} seconds.'.format(timeit.default_timer() - start)
@@ -289,6 +262,13 @@ def parse(tweets):
 
 def process(nominee):
     relevant = update_relevant_categories(nominee)
+
+def process_presenters(presenter_name, category_name):
+    present_obj = {}
+    present_obj['category'] = ' '.join(category_name)
+    present_obj['name'] = presenter_name
+
+    presenters.append(present_obj)
 
 def update_relevant_categories(mentioned):
     relevant = []
@@ -326,6 +306,9 @@ def populate_presenters():
 ### RETRIEVE TRACKED DATA ####
 ##############################
 
+def get_current_count():
+    return COUNTER
+
 def get_current_winners():
     return categories
 
@@ -362,6 +345,62 @@ def get_mentioned_nominees(tweet):
 
     return mentioned
 
+def get_name(category, tagged_tokens):
+    for tok in xrange(0,len(tagged_tokens)-1,2):
+        flag = False
+        for word in stop_words:
+            if word == tagged_tokens[tok][0]:
+                flag = True
+
+        if (tagged_tokens[tok][0] == "Golden") and (tagged_tokens[tok+1][0] == "Globes" or tagged_tokens[tok+1][0] == "Globe"):
+            continue
+
+        if (tagged_tokens[tok][0] == "Red") and (tagged_tokens[tok+1][0] == "Carpet"):
+            continue
+
+        if (tagged_tokens[tok][0] == "Best"):
+            continue                
+
+        if tagged_tokens[tok][0][0].islower() or tagged_tokens[tok+1][0][0].islower():
+            continue
+
+        if tagged_tokens[tok][0].isupper() or tagged_tokens[tok+1][0].isupper():
+            continue
+
+        for symbol in punct:
+            if symbol in tagged_tokens[tok][0] or symbol in tagged_tokens[tok+1][0]:
+                flag = True
+
+        if flag:
+            continue
+
+        if tagged_tokens[tok][1] == "NNP" and tagged_tokens[tok+1][1] == "NNP":
+            name = tagged_tokens[tok][0] + " " + tagged_tokens[tok+1][0]
+            
+            if category == "best":
+                if name in best_dressed.keys():
+                    best_dressed[name] += 1
+                else:
+                    best_dressed[name] = 1
+            elif category == "worst":
+                if name in worst_dressed.keys():
+                    worst_dressed[name] += 1
+                else:
+                    worst_dressed[name] = 1
+            elif category == "presents":
+                return name
+    return
+
+def update_relevant_categories(mentioned):
+    relevant = []
+
+    for category in categories:
+        for nominee in category["nominees"]:
+            if nominee['name'] in mentioned:
+                relevant.append(category)
+                nominee['score'] += 1
+
+    return relevant
 
 ##############################
 #### TWEET CATEGORIZATION ####
@@ -511,6 +550,14 @@ def print_current_winners():
         print category['nominees'][0]['score']
         print ''
     return categories
+
+def get_current_winners():
+    # for category in categories:
+    #     category['nominees'].sort(key=lambda nominee: nominee['score'], reverse=True)
+    return categories
+
+# def get_presenters():
+#     return presenters
 
 # read_stream('../data/goldenglobes2015.json')
 

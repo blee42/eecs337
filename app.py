@@ -56,23 +56,32 @@ def home():
     
     context['categories'] = categories
     context['hosts'] = hosts
+    context['counter'] = reader.get_current_count()
     return render_template('pages/placeholder.home.html', context=context)
 
 @app.route('/redcarpet')
 def red_carpet():
     red_carpet_data = reader.get_current_red_carpet()
+    red_carpet_data['counter'] = reader.get_current_count()
     return render_template('pages/placeholder.redcarpet.html', context=red_carpet_data)
 
 @app.route('/parties')
 def parties():
     parties = reader.get_current_parties()
-    return render_template('pages/placeholder.parties.html', context=parties)
+    context = [parties, reader.get_current_count()]
+    return render_template('pages/placeholder.parties.html', context=context)
+
+@app.route('/presenters')
+def presenters():
+    presenters = reader.get_presenters()
+    return render_template('pages/placeholder.presenters.html', context=presenters)
 
 @app.route('/sentiment')
 def sentiments():
     sentiments = reader.get_current_sentiments()
     sentiments[1].sort(key=lambda wordTuple: wordTuple[1], reverse=True)
     sentiments[2].sort(key=lambda wordTuple: wordTuple[1], reverse=True)
+    sentiments.append(reader.get_current_count())
     return render_template('pages/placeholder.sentiments.html', context=sentiments)
 
 @app.route('/about')

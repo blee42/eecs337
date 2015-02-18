@@ -3,7 +3,8 @@
 {% block content %}
 
 <div>
-	{% for party in context %}
+  <h4 class="pull-right"> Processed: {{ context[1] }} tweets </h4><br/>
+	{% for party in context[0] %}
 	<h3>{{ party }}</h3>
 	{% endfor %}
 </div>

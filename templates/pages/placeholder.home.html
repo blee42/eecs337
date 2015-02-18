@@ -3,12 +3,15 @@
 {% block content %}
 
 <div>
+  <h4 class="pull-right"> Processed: {{ context['counter'] }} tweets </h4><br/>
   <h3 class="text-center">Hosts: {{ context['hosts'][0] }} & {{ context['hosts'][1] }}</h3>
-	{% for category in context['categories'] %}
+  {% for category in context['categories'] %}
   <div class='winners-container'>
     <div class='winners-content'>
     	<h3>{{ category['category'] }}</h3>
-      <h4>PRESENTER: </h4>
+      {% if category['presenters'] %}
+      <h4>PRESENTER: {{ category['presenters'][0]['name'] }}</h4>
+      {% endif %}
     	<h4>WINNER: {{ category['nominees'][0]['name'] }}</h4>
     	<h4>SCORE: {{ category['nominees'][0]['score'] }}</h4>
     </div>
