@@ -21,8 +21,8 @@ INTERRUPT = False
 #### KEYWORD STRINGS ####
 winStrings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
 loseStrings = ['lose', 'losing', 'lost']
-negStrings = ["afraid", "angry", "annoyed", "ashamed", "awful", "bad", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "fierce", "foolish", "frantic", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "nervous", "obnoxious", "outrageous", "panicky", "repulsive", "safe", "scared", "shy", "sleepy", "sore", "strange", "tense", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
-posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "congrats", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "innocent", "jolly", "kind", "lively", "lovely", "lucky", "obedient", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
+negStrings = ["afraid", "angry", "annoyed", "ashamed", "awful", "bad", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "foolish", "frantic", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "obnoxious", "outrageous", "panicky", "repulsive", "scared", "shy", "sleepy","strange", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
+posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "congrats", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "jolly", "kind", "lively", "lovely", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
 # negStrings = []
 # posStrings = []
 wishStrings = ["hope", "hoping", "if", "luck"]
@@ -68,8 +68,8 @@ def init(tweets):
     global categories
     global nominees
     global sentiments
-    # global negStrings
-    # global posStrings
+    global negStrings
+    global posStrings
     
     if (INTERRUPT):
         INTERRUPT.set()
@@ -86,8 +86,15 @@ def init(tweets):
     nominees = get_nominees(categories)
     sentiments['upvote'] = 0
     sentiments['downvote'] = 0
-    # negStrings = get_strings('scripts/negativewords')
-    # posStrings = get_strings('scripts/positivewords')
+
+    newNeg = []
+    for i in negStrings:
+        newNeg.append([i, 0])
+    negStrings = newNeg
+    newPos = []
+    for i in posStrings:
+        newPos.append([i, 0])
+    posStrings = newPos
 
 def get_strings(fn):
     f = open(fn)
@@ -237,9 +244,12 @@ def parse(tweets):
 
             # SENTIMENT
             if not is_wishful_tweet(tweet_string.lower()):
-                if is_happy_tweet(tweet_string.lower()):
+                happy = count_happy_words(tweet_string.lower())
+                sad = count_sad_words(tweet_string.lower())
+
+                if happy > sad:
                     sentiments['upvote'] += 1
-                elif is_sad_tweet(tweet_string.lower()):
+                elif sad > happy:
                     sentiments['downvote'] += 1
 
         # if count%100000 == 0:
@@ -286,7 +296,7 @@ def get_current_parties():
     return parties
 
 def get_current_sentiments():
-    return sentiments
+    return [sentiments, posStrings, negStrings]
 
 def get_nominees(categories):
     nominee_list = []
@@ -335,16 +345,6 @@ def is_wishful_tweet(tweet):
         return True
     return False
 
-def is_happy_tweet(tweet):
-    if any([i in tweet for i in posStrings]):
-        return True
-    return False
-
-def is_sad_tweet(tweet):
-    if any([i in tweet for i in negStrings]):
-        return True
-    return False
-
 def is_a_party(tweet):
     partyStrings = ["parties", "party"];
 
@@ -388,6 +388,26 @@ def is_worst_dressed(tweet):
     if any([i in tweet for i in worstDressedStrings]):
         return True
     return False
+
+##############################
+###### COUNTER FUNCTIONS #####
+##############################
+
+def count_happy_words(tweet):
+    count = 0
+    for wordTuple in posStrings:
+        if (' ' + wordTuple[0] + ' ') in tweet:
+            count += 1
+            wordTuple[1] += 1
+    return count
+
+def count_sad_words(tweet):
+    count = 0
+    for wordTuple in negStrings:
+        if (' ' + wordTuple[0] + ' ') in tweet:
+            count += 1
+            wordTuple[1] += 1
+    return count
 
 ##############################
 ####### PRINT FUNCTIONS ######

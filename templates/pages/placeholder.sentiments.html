@@ -5,11 +5,17 @@
 <div>
   <div class="col-md-6 text-center">
     <h1>Happy Tweets</h1>
-    <h3>{{ context['upvote'] }}</h3>
+    <h3>{{ context[0]['upvote'] }}</h3>
+    {% for wordTuple in context[1][:7] %}
+      <h4>{{ wordTuple[0] }} </h4>
+    {% endfor %}
   </div>
   <div class="col-md-6 text-center">
     <h1>Less Happy Tweets</h1>
-    <h3>{{ context['downvote'] }}</h3>
+    <h3>{{ context[0]['downvote'] }}</h3>
+    {% for wordTuple in context[2][:7] %}
+      <h4>{{ wordTuple[0] }} </h4>
+    {% endfor %}
   </div>
 </div>
 
