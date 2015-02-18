@@ -7,10 +7,6 @@ import nominee_scraper
 import sys
 import os
 import sys
-# import urllib2
-# import bs4
-# import selenium.webdriver as webdriver
-# from pyvirtualdisplay import Display
 from nltk import sent_tokenize, word_tokenize, pos_tag, ne_chunk
 from nltk.tokenize import SpaceTokenizer
 from nltk.tokenize import TreebankWordTokenizer
