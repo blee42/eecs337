@@ -61,7 +61,7 @@
                 "presenters": [],
                 "winner": "Fargo "
             },
-            "Best motion picture \\u2013 comedy or musical": {
+            "Best motion picture \u2013 comedy or musical": {
                 "nominees": [
                     "Birdman",
                     "Pride",
@@ -71,7 +71,7 @@
                 "presenters": [],
                 "winner": "The Grand Budapest Hotel"
             },
-            "Best motion picture \\u2013 drama": {
+            "Best motion picture \u2013 drama": {
                 "nominees": [
                     "The Theory of Everything",
                     "Selma",
@@ -91,7 +91,7 @@
                 "presenters": [],
                 "winner": "Billy Bob Thornton"
             },
-            "Best performance by an actor in a motion picture \\u2013 comedy or musical": {
+            "Best performance by an actor in a motion picture \u2013 comedy or musical": {
                 "nominees": [
                     "Christoph Waltz",
                     "Ralph Fiennes",
@@ -101,7 +101,7 @@
                 "presenters": [],
                 "winner": "Michael Keaton"
             },
-            "Best performance by an actor in a motion picture \\u2013 drama": {
+            "Best performance by an actor in a motion picture \u2013 drama": {
                 "nominees": [
                     "Jake Gyllenhaal",
                     "Steve Carell",
@@ -141,7 +141,7 @@
                 "presenters": [],
                 "winner": "Louis CK"
             },
-            "Best performance by an actor in a television series \\u2013 drama": {
+            "Best performance by an actor in a television series \u2013 drama": {
                 "nominees": [
                     "Dominic West",
                     "Clive Owen",
@@ -155,13 +155,13 @@
                 "nominees": [
                     "Frances McDormand",
                     "Jessica Lange",
-                    "Frances O\\u2019Connor",
+                    "Frances O\u2019Connor",
                     "Allison Tolman"
                 ],
                 "presenters": [],
                 "winner": "Maggie Gyllenhaal"
             },
-            "Best performance by an actress in a motion picture \\u2013 drama": {
+            "Best performance by an actress in a motion picture \u2013 drama": {
                 "nominees": [
                     "Rosamund Pike",
                     "Felicity Jones",
@@ -171,12 +171,12 @@
                 "presenters": [],
                 "winner": "Julianne Moore"
             },
-            "Best performance by an actress in a motion picture \\u2013 musical or comedy": {
+            "Best performance by an actress in a motion picture \u2013 musical or comedy": {
                 "nominees": [
                     "Amy Adams",
                     "Helen Mirren",
                     "Emily Blunt",
-                    "Quvenzhan\\u00e9 Wallis"
+                    "Quvenzhan\u00e9 Wallis"
                 ],
                 "presenters": [],
                 "winner": "Julianne Moore"
@@ -211,7 +211,7 @@
                 "presenters": [],
                 "winner": "Gina Rodriguez"
             },
-            "Best performance by an actress in a television series \\u2013 drama": {
+            "Best performance by an actress in a television series \u2013 drama": {
                 "nominees": [
                     "Viola Davis",
                     "Julianna Margulies",
@@ -231,7 +231,7 @@
                 "presenters": [],
                 "winner": "Boyhood"
             },
-            "Best television series \\u2013 comedy": {
+            "Best television series \u2013 comedy": {
                 "nominees": [
                     "Jane the Virgin",
                     "Silicon Valley",
@@ -240,7 +240,7 @@
                 "presenters": [],
                 "winner": "Transparent"
             },
-            "Best television series \\u2013 drama": {
+            "Best television series \u2013 drama": {
                 "nominees": [
                     "House of Cards",
                     "Downton Abbey",
@@ -253,12 +253,12 @@
         },
         "unstructured": {
             "awards": [
-                "Best motion picture \\u2013 drama",
-                "Best performance by an actor in a motion picture \\u2013 drama",
-                "Best performance by an actress in a motion picture \\u2013 drama",
-                "Best motion picture \\u2013 comedy or musical",
-                "Best performance by an actor in a motion picture \\u2013 comedy or musical",
-                "Best performance by an actress in a motion picture \\u2013 musical or comedy",
+                "Best motion picture \u2013 drama",
+                "Best performance by an actor in a motion picture \u2013 drama",
+                "Best performance by an actress in a motion picture \u2013 drama",
+                "Best motion picture \u2013 comedy or musical",
+                "Best performance by an actor in a motion picture \u2013 comedy or musical",
+                "Best performance by an actress in a motion picture \u2013 musical or comedy",
                 "Best performance by an actress in a supporting role in a motion picture",
                 "Best performance by an actor in a supporting role in a motion picture",
                 "Best director",
@@ -267,10 +267,10 @@
                 "Best animated feature film",
                 "Best Original Song - Motion Picture",
                 "Best Original Score - Motion Picture",
-                "Best television series \\u2013 drama",
-                "Best performance by an actor in a television series \\u2013 drama",
-                "Best performance by an actress in a television series \\u2013 drama",
-                "Best television series \\u2013 comedy",
+                "Best television series \u2013 drama",
+                "Best performance by an actor in a television series \u2013 drama",
+                "Best performance by an actress in a television series \u2013 drama",
+                "Best television series \u2013 comedy",
                 "Best performance by an actor in a television series - comedy or musical",
                 "Best performance by an actress in a television series - comedy or musical",
                 "Best performance by an actress in a miniseries or motion picture made for television",
@@ -307,7 +307,7 @@
                 "Amy Adams",
                 "Helen Mirren",
                 "Emily Blunt",
-                "Quvenzhan\\u00e9 Wallis",
+                "Quvenzhan\u00e9 Wallis",
                 "Jessica Chastain",
                 "Meryl Streep",
                 "Keira Knightley",
@@ -360,7 +360,7 @@
                 "Taylor Schilling",
                 "Frances McDormand",
                 "Jessica Lange",
-                "Frances O\\u2019Connor",
+                "Frances O\u2019Connor",
                 "Allison Tolman",
                 "Matthew McConaughey",
                 "Martin Freeman",

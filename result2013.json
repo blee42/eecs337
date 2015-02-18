@@ -1,0 +1,274 @@
+{
+    "data": {
+        "structured": {
+            "Best actor in a comedy or musical": {
+                "nominees": [
+                    "Jack Black",
+                    "Bradley Cooper",
+                    "Bill Murray",
+                    "Ewan MacGregor"
+                ],
+                "presenters": [],
+                "winner": "Hugh Jackman"
+            },
+            "Best actor in a drama ": {
+                "nominees": [
+                    "Richard Gere",
+                    "John Hawkes",
+                    "Joaquin Phoenix",
+                    "Denzel Washington"
+                ],
+                "presenters": [],
+                "winner": "Daniel Day-Lewis"
+            },
+            "Best actress in a comedy or musical": {
+                "nominees": [
+                    "Emily Blunt",
+                    "Judi Dench",
+                    "Jennifer Lawrence",
+                    "Meryl Streep"
+                ],
+                "presenters": [],
+                "winner": "Maggie Smith"
+            },
+            "Best actress in a drama": {
+                "nominees": [
+                    "Marion Cotillard",
+                    "Helen Mirren",
+                    "Naomi Watts",
+                    "Rachel Weisz"
+                ],
+                "presenters": [],
+                "winner": "Jessica Chastain"
+            },
+            "Best animation": {
+                "nominees": [
+                    "Frankenweenie",
+                    "Hotel Transylvania",
+                    "Rise of the Guardians",
+                    "Wreck-It Ralph"
+                ],
+                "presenters": [],
+                "winner": "Brave"
+            },
+            "Best comedy or musical": {
+                "nominees": [
+                    "The Best Exotic Marigold Hotel",
+                    "Moonrise Kingdom",
+                    "Salmon Fishing in the Yemen",
+                    "Silver Linings Playbook"
+                ],
+                "presenters": [],
+                "winner": "Les Miserables"
+            },
+            "Best director": {
+                "nominees": [
+                    "Quentin Tarantino",
+                    "Kathryn Bigelow",
+                    "Ang Lee",
+                    "Steven Spielberg"
+                ],
+                "presenters": [],
+                "winner": "Ben Affleck"
+            },
+            "Best drama": {
+                "nominees": [
+                    "Lincoln",
+                    "Django Unchained",
+                    "Zero Dark Thirty",
+                    "Life of Pi"
+                ],
+                "presenters": [],
+                "winner": "Argo"
+            },
+            "Best foreign film": {
+                "nominees": [
+                    "A Royal Affair",
+                    "Kon-Tiki",
+                    "Rust and Bone",
+                    "Untouchable"
+                ],
+                "presenters": [],
+                "winner": "Amour"
+            },
+            "Best original score": {
+                "nominees": [
+                    "Alexandre Desplat",
+                    "Dario Marianelli",
+                    "Tom Tyker",
+                    "John Williams"
+                ],
+                "presenters": [],
+                "winner": "Mychael Danna"
+            },
+            "Best original song": {
+                "nominees": [
+                    "For You",
+                    "Not Running Anymore",
+                    "Safe and Sound",
+                    "Suddenly"
+                ],
+                "presenters": [],
+                "winner": "Skyfall"
+            },
+            "Best screenplay": {
+                "nominees": [
+                    "Chris Terrio",
+                    "Tony Kushner",
+                    "David O Russell and Matthew Quick",
+                    "Mark Boal"
+                ],
+                "presenters": [],
+                "winner": "Quentin Tarantino"
+            },
+            "Best supporting actor": {
+                "nominees": [
+                    "Alan Arkin",
+                    "Leonardo DiCaprio",
+                    "Philip Seymour Hoffman",
+                    "Tommy Lee Jones"
+                ],
+                "presenters": [],
+                "winner": "Christoph Waltz"
+            },
+            "Best supporting actress": {
+                "nominees": [
+                    "Sally Field",
+                    "Amy Adams",
+                    "Helen Hunt",
+                    "Nicole Kidman"
+                ],
+                "presenters": [],
+                "winner": "Anne Hathaway"
+            }
+        },
+        "unstructured": {
+            "awards": [
+                "Best drama",
+                "Best comedy or musical",
+                "Best screenplay",
+                "Best director",
+                "Best actor in a drama ",
+                "Best actress in a drama",
+                "Best actor in a comedy or musical",
+                "Best actress in a comedy or musical",
+                "Best supporting actress",
+                "Best supporting actor",
+                "Best foreign film",
+                "Best animation",
+                "Best original score",
+                "Best original song"
+            ],
+            "hosts": [
+                "Tina Fey",
+                "Amy Poehler"
+            ],
+            "nominees": [
+                "Lincoln",
+                "Django Unchained",
+                "Zero Dark Thirty",
+                "Life of Pi",
+                "The Best Exotic Marigold Hotel",
+                "Moonrise Kingdom",
+                "Salmon Fishing in the Yemen",
+                "Silver Linings Playbook",
+                "Chris Terrio",
+                "Tony Kushner",
+                "David O Russell and Matthew Quick",
+                "Mark Boal",
+                "Quentin Tarantino",
+                "Kathryn Bigelow",
+                "Ang Lee",
+                "Steven Spielberg",
+                "Richard Gere",
+                "John Hawkes",
+                "Joaquin Phoenix",
+                "Denzel Washington",
+                "Marion Cotillard",
+                "Helen Mirren",
+                "Naomi Watts",
+                "Rachel Weisz",
+                "Jack Black",
+                "Bradley Cooper",
+                "Bill Murray",
+                "Ewan MacGregor",
+                "Emily Blunt",
+                "Judi Dench",
+                "Jennifer Lawrence",
+                "Meryl Streep",
+                "Sally Field",
+                "Amy Adams",
+                "Helen Hunt",
+                "Nicole Kidman",
+                "Alan Arkin",
+                "Leonardo DiCaprio",
+                "Philip Seymour Hoffman",
+                "Tommy Lee Jones",
+                "A Royal Affair",
+                "Kon-Tiki",
+                "Rust and Bone",
+                "Untouchable",
+                "Frankenweenie",
+                "Hotel Transylvania",
+                "Rise of the Guardians",
+                "Wreck-It Ralph",
+                "Alexandre Desplat",
+                "Dario Marianelli",
+                "Tom Tyker",
+                "John Williams",
+                "For You",
+                "Not Running Anymore",
+                "Safe and Sound",
+                "Suddenly"
+            ],
+            "presenters": [],
+            "winners": [
+                "Argo",
+                "Les Miserables",
+                "Quentin Tarantino",
+                "Ben Affleck",
+                "Daniel Day-Lewis",
+                "Jessica Chastain",
+                "Hugh Jackman",
+                "Maggie Smith",
+                "Anne Hathaway",
+                "Christoph Waltz",
+                "Amour",
+                "Brave",
+                "Mychael Danna",
+                "Skyfall"
+            ]
+        }
+    },
+    "metadata": {
+        "mappings": {
+            "nominees": {
+                "method": "scraped",
+                "method_description": ""
+            },
+            "presenters": {
+                "method": "detected",
+                "method_description": ""
+            }
+        },
+        "names": {
+            "awards": {
+                "method": "detected",
+                "method_description": ""
+            },
+            "hosts": {
+                "method": "hardcoded",
+                "method_description": ""
+            },
+            "nominees": {
+                "method": "scraped",
+                "method_description": ""
+            },
+            "presenters": {
+                "method": "detected",
+                "method_description": ""
+            }
+        },
+        "year": 2013
+    }
+}

@@ -1,14 +1,19 @@
 from reader import init, parse, get_current_winners
 import io, json
 
-tweets='data/goldenglobes2015.json'
+year = 2013
+if year == 2015:
+    tweets = 'data/goldenglobes2015.json'
+else:
+    tweets = 'data/gg2013.json'
+year = 2013
 init(tweets)
 parse(tweets)
 winners = get_current_winners()
 
 result = {
     "metadata": {
-        "year": 2015,
+        "year": year,
         "names" : {
             "hosts": {
                 "method": "hardcoded",
@@ -51,32 +56,35 @@ result = {
     }
 }
 
-converters = {
-    'Best original score': {
-        'name': 'Best Original Score - Motion Picture',
-        'Johann Johannsson': 'The Theory of Everything',
-        'Alexandre Desplat': 'The Imitation Game',
-        'Trent Reznor & Atticus Ross': 'Gone Girl',
-        'Antonio Sanchez': 'Birdman',
-        'Hans Zimmer': 'Interstellar'
-    },
-    'Best original song': {
-        'name': 'Best Original Song - Motion Picture',
-        'Big Eyes': 'Big Eyes',
-        'Glory': 'Selma',
-        'Mercy Is': 'Noah',
-        'Opportunity': 'Annie',
-        'Yellow Flicker Beat': 'The Hunger Games: Mockingjay - Part 1'
-    },
-    'Best screenplay': {
-        'name': 'Best screenplay',
-        'Wes Anderson': 'The Grand Budapest Hotel',
-        'Gillian Flynn': 'Gone Girl',
-        'Alejandro Inarritu Gonzalez': 'Birdman',
-        'Richard Linklater': 'Boyhood',
-        'Graham Moore': 'The Imitation Game'
+if year == 2015:
+    converters = {
+        'Best original score': {
+            'name': 'Best Original Score - Motion Picture',
+            'Johann Johannsson': 'The Theory of Everything',
+            'Alexandre Desplat': 'The Imitation Game',
+            'Trent Reznor & Atticus Ross': 'Gone Girl',
+            'Antonio Sanchez': 'Birdman',
+            'Hans Zimmer': 'Interstellar'
+        },
+        'Best original song': {
+            'name': 'Best Original Song - Motion Picture',
+            'Big Eyes': 'Big Eyes',
+            'Glory': 'Selma',
+            'Mercy Is': 'Noah',
+            'Opportunity': 'Annie',
+            'Yellow Flicker Beat': 'The Hunger Games: Mockingjay - Part 1'
+        },
+        'Best screenplay': {
+            'name': 'Best screenplay',
+            'Wes Anderson': 'The Grand Budapest Hotel',
+            'Gillian Flynn': 'Gone Girl',
+            'Alejandro Inarritu Gonzalez': 'Birdman',
+            'Richard Linklater': 'Boyhood',
+            'Graham Moore': 'The Imitation Game'
+        }
     }
-}
+else:
+    converters = {}
 
 for category in winners:
     if category['category'] in converters:
@@ -101,5 +109,5 @@ for category in winners:
         if presenter not in result["data"]["unstructured"]["presenters"]:
             result["data"]["unstructured"]["presenters"].append(presenter)
 
-with io.open('result.json', 'w', encoding='utf-8') as f:
+with io.open('result{0}.json'.format(year), 'w', encoding='utf-8') as f:
      f.write(unicode(json.dumps(result, sort_keys=True, indent=4, separators=(',', ': '))))
