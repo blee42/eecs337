@@ -7,6 +7,10 @@ import nominee_scraper
 import sys
 import os
 import sys
+from nltk import sent_tokenize, word_tokenize, pos_tag, ne_chunk
+from nltk.tokenize import SpaceTokenizer
+from nltk.tokenize import TreebankWordTokenizer
+import pdb
 import time
 import timeit
 
@@ -29,8 +33,10 @@ wishStrings = ["hope", "hoping", "if", "luck"]
 presentStrings = ["presenting", "present", "presented", "presenter"]
 
 #### TOOL LISTS ####
+wordTokenizer= TreebankWordTokenizer()
 punct = ["!", ",", ".", "&", "@", "#", "-", "'"]
 stop_words = nltk.corpus.stopwords.words('english')
+stopList= ["Golden", "Globe" , "GOLDEN" , "GLOBE" , "Actress" , "TV" , "Drama" , "Actor" , "Best" , "Song" , "Film" , "Movie" , "Present" , "Award" , "Original" , "Screenplay", "Comedy/Musical" , "Comedy", "DAMM" , "She" , "He" , "Make" ,"Adding" , "Can't", "To" , "At" , "I" , "Love", "The" , "Remember", "If" , "Purple", "Yoda", "Boy", "It", "Represent" , "Nominees"] 
 
 #### GLOBAL TRACKERS ####
 nominees = []
@@ -39,6 +45,8 @@ parties = []
 best_dressed = {}
 worst_dressed = {}
 sentiments = {}
+Dict={}
+presentersList=[]
 
 ##############################
 ######### THREADING ##########
@@ -87,6 +95,8 @@ def init(tweets):
     sentiments['upvote'] = 0
     sentiments['downvote'] = 0
 
+    negStrings = ["afraid", "angry", "annoyed", "ashamed", "awful", "bad", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "foolish", "frantic", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "obnoxious", "outrageous", "panicky", "repulsive", "scared", "shy", "sleepy","strange", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
+    posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "congrats", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "jolly", "kind", "lively", "lovely", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
     newNeg = []
     for i in negStrings:
         newNeg.append([i, 0])
@@ -156,7 +166,7 @@ def parse(tweets):
         f = eval(f.readline())
         sys.stdout.flush()
 
-    # count = 0
+    count = 0
     for line in f:
         if (INTERRUPT.is_set()):
             break;
@@ -173,6 +183,19 @@ def parse(tweets):
         if "Best" in tweet_string and nominee and "wins" in tweet_string:
             if not is_wishful_tweet(tweet_string.lower()):
                 process(nominee)
+
+
+        if  is_presenterList(tweet_string.lower()):
+           
+            if "best" in tweet_string.lower():
+                name = extract_name(tweet_string)
+                val=0
+                for word in name:
+                    key=word
+                    if key in Dict:
+                        Dict[key]+=1
+                    else:
+                        Dict[key]=1
 
         if not is_retweet(tweet_string):
             # RED CARPET
@@ -252,16 +275,17 @@ def parse(tweets):
                 elif sad > happy:
                     sentiments['downvote'] += 1
 
-        # if count%100000 == 0:
-        #     print '\rCount: ',count,
-        #     sys.stdout.flush()
-        # count+=1
+
+        if count%10000 == 0:
+            print '\rCount: ',count,
+            sys.stdout.flush()
+        count+=1
 
     print 'Finished parsing all {0} data.'.format(str(MODE))
     print 'Took {0} seconds.'.format(timeit.default_timer() - start)
 
-    while True:
-        time.sleep(100000)
+    # while True:
+    #     time.sleep(100000)
 
 ##############################
 ###### PROCESS RESULTS #######
@@ -282,6 +306,26 @@ def update_relevant_categories(mentioned):
 
     return relevant
 
+def Dictionary_done():
+    for keys,values in Dict.items():
+
+       if  len(keys.split()) == 2:
+            flag=0
+            
+            token_list=wordTokenizer.tokenize(keys)
+            for token in token_list:
+                if token.lower() in stopList:
+                    flag=1
+                    break
+                
+            if values > 5 and flag == 0:
+                pp.pprint(values)
+                if keys not in presentersList:
+                    presentersList.append(keys)
+                    pp.pprint(presentersList)
+            else :
+                continue
+
 ##############################
 ### RETRIEVE TRACKED DATA ####
 ##############################
@@ -297,6 +341,10 @@ def get_current_parties():
 
 def get_current_sentiments():
     return [sentiments, posStrings, negStrings]
+
+def get_presenters():
+    Dictionary_done()
+    return presentersList
 
 def get_nominees(categories):
     nominee_list = []
@@ -318,9 +366,18 @@ def get_mentioned_nominees(tweet):
 
     return mentioned
 
+
 ##############################
 #### TWEET CATEGORIZATION ####
 ##############################
+
+def extract_name(tweet):
+    token=SpaceTokenizer()
+    toks=token.tokenize(tweet)
+    pos=pos_tag(toks)
+    chunked_nes=ne_chunk(pos)
+    nes = [' '.join(map(lambda x: x[0], ne.leaves())) for ne in chunked_nes if isinstance(ne, nltk.tree.Tree)]
+    return nes
 
 def is_retweet(tweet):
     if tweet[:4] == "RT @":
@@ -336,6 +393,16 @@ def is_useful_tweet(tweet):
             return nominee
     return False
 
+def is_one_category(tweet):
+    if is_retweet(tweet):
+        return False
+    for category in categories:
+        for cat in category["category"]:
+            if cat in tweet:
+                return cat
+            
+    return false        
+
 def is_wishful_tweet(tweet):
     # for word in wishStrings:
     #     if word in tweet:
@@ -344,6 +411,22 @@ def is_wishful_tweet(tweet):
     if any([i in tweet for i in wishStrings]):
         return True
     return False
+
+def is_happy_tweet(tweet):
+    if any([i in tweet for i in posStrings]):
+        return True
+    return False
+
+def is_sad_tweet(tweet):
+    if any([i in tweet for i in negStrings]):
+        return True
+    return False
+
+def is_notstop_word(word):
+    for a in stopList:
+        if a in word:
+            return False
+    return True
 
 def is_a_party(tweet):
     partyStrings = ["parties", "party"];
@@ -356,10 +439,14 @@ def is_a_party(tweet):
             
     return False
 
-def is_presenter_tweet(tweet):
+def is_cat_tweet(word):
     if is_retweet(tweet):
         return False
-
+    for category in categories:
+        for nominee in category["nominees"]:
+            nom_str=str(nominee)
+            pp.pprint(word)
+            return word
     for presenter in presenters:
         if presenter in tweet:
             return presenter

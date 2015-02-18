@@ -61,8 +61,8 @@ a {
     margin-left: 20px;
     display: inline-block;
     padding: 5px 10px 5px 10px;
-    border-left: 1px #d8d8d8 solid;
-    border-right: 1px #d8d8d8 solid;
+    /*border-left: 1px #d8d8d8 solid;
+    border-right: 1px #d8d8d8 solid;*/
 }
 
 .winners-expandable h5 {
