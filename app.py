@@ -76,6 +76,8 @@ def presenters():
 @app.route('/sentiment')
 def sentiments():
     sentiments = reader.get_current_sentiments()
+    sentiments[1].sort(key=lambda wordTuple: wordTuple[1], reverse=True)
+    sentiments[2].sort(key=lambda wordTuple: wordTuple[1], reverse=True)
     return render_template('pages/placeholder.sentiments.html', context=sentiments)
 
 @app.route('/about')
