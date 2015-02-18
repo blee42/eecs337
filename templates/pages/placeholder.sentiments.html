@@ -3,18 +3,19 @@
 {% block content %}
 
 <div>
+  <h4 class="pull-right"> Processed: {{ context[3] }} tweets </h4><br/>
   <div class="col-md-6 text-center">
     <h1>Happy Tweets</h1>
     <h3>{{ context[0]['upvote'] }}</h3>
-    {% for wordTuple in context[1][:7] %}
-      <h4>{{ wordTuple[0] }} </h4>
+    {% for word_tuple in context[1][:7] %}
+      <h4>{{ word_tuple[0] }} </h4>
     {% endfor %}
   </div>
   <div class="col-md-6 text-center">
     <h1>Less Happy Tweets</h1>
     <h3>{{ context[0]['downvote'] }}</h3>
-    {% for wordTuple in context[2][:7] %}
-      <h4>{{ wordTuple[0] }} </h4>
+    {% for word_tuple in context[2][:7] %}
+      <h4>{{ word_tuple[0] }} </h4>
     {% endfor %}
   </div>
 </div>

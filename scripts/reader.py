@@ -7,10 +7,10 @@ import nominee_scraper
 import sys
 import os
 import sys
-import urllib2
-import bs4
-import selenium.webdriver as webdriver
-from pyvirtualdisplay import Display
+# import urllib2
+# import bs4
+# import selenium.webdriver as webdriver
+# from pyvirtualdisplay import Display
 from nltk import sent_tokenize, word_tokenize, pos_tag, ne_chunk
 from nltk.tokenize import SpaceTokenizer
 from nltk.tokenize import TreebankWordTokenizer
@@ -26,22 +26,21 @@ pp = pprint.PrettyPrinter()
 MODE = 2015
 RUNNING_THREAD = False
 INTERRUPT = False
+COUNTER = 0
 
 #### KEYWORD STRINGS ####
-winStrings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
-loseStrings = ['lose', 'losing', 'lost']
-negStrings = ["afraid", "angry", "annoyed", "ashamed", "awful", "bad", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "foolish", "frantic", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "obnoxious", "outrageous", "panicky", "repulsive", "scared", "shy", "sleepy","strange", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
-posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "congrats", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "jolly", "kind", "lively", "lovely", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
-# negStrings = []
-# posStrings = []
-wishStrings = ["hope", "hoping", "if", "luck"]
-presentStrings = ["presenting", "present", "presented", "presenter", "presents"]
+win_strings = ['win', 'congrats', 'winner', 'winning', 'good job', ' won ', ]
+lose_strings = ['lose', 'losing', 'lost']
+neg_strings = ["afraid", "angry", "annoyed", "ashamed", "awful", "bad", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "foolish", "frantic", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "obnoxious", "outrageous", "panicky", "repulsive", "scared", "shy", "sleepy","strange", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
+pos_strings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "congrats", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "jolly", "kind", "lively", "lovely", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
+wish_strings = ["hope", "hoping", "if", "luck"]
+present_strings = ["presenting", "present", "presented", "presenter", "presents"]
 
 #### TOOL LISTS ####
-wordTokenizer= TreebankWordTokenizer()
+work_tokenizer= TreebankWordTokenizer()
 punct = ["!", ",", ".", "&", "@", "#", "-", "'"]
 stop_words = nltk.corpus.stopwords.words('english')
-stopList= ["Golden", "Globe" , "GOLDEN" , "GLOBE" , "Actress" , "TV" , "Drama" , "Actor" , "Best" , "Song" , "Film" , "Movie" , "Present" , "Award" , "Original" , "Screenplay", "Comedy/Musical" , "Comedy", "DAMM" , "She" , "He" , "Make" ,"Adding" , "Can't", "To" , "At" , "I" , "Love", "The" , "Remember", "If" , "Purple", "Yoda", "Boy", "It", "Represent" , "Nominees"] 
+stop_list= ["Golden", "Globe" , "GOLDEN" , "GLOBE" , "Actress" , "TV" , "Drama" , "Actor" , "Best" , "Song" , "Film" , "Movie" , "Present" , "Award" , "Original" , "Screenplay", "Comedy/Musical" , "Comedy", "DAMM" , "She" , "He" , "Make" ,"Adding" , "Can't", "To" , "At" , "I" , "Love", "The" , "Remember", "If" , "Purple", "Yoda", "Boy", "It", "Represent" , "Nominees"] 
 
 #### GLOBAL TRACKERS ####
 nominees = []
@@ -51,8 +50,8 @@ presenters = []
 best_dressed = {}
 worst_dressed = {}
 sentiments = {}
-Dict={}
-presentersList=[]
+presenter_dict={}
+presenter_list=[]
 
 ##############################
 ######### THREADING ##########
@@ -82,8 +81,8 @@ def init(tweets):
     global categories
     global nominees
     global sentiments
-    global negStrings
-    global posStrings
+    global neg_strings
+    global pos_strings
     
     if (INTERRUPT):
         INTERRUPT.set()
@@ -101,16 +100,16 @@ def init(tweets):
     sentiments['upvote'] = 0
     sentiments['downvote'] = 0
 
-    negStrings = ["afraid", "angry", "annoyed", "ashamed", "awful", "bad", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "foolish", "frantic", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "obnoxious", "outrageous", "panicky", "repulsive", "scared", "shy", "sleepy","strange", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
-    posStrings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "congrats", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "jolly", "kind", "lively", "lovely", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
-    newNeg = []
-    for i in negStrings:
-        newNeg.append([i, 0])
-    negStrings = newNeg
-    newPos = []
-    for i in posStrings:
-        newPos.append([i, 0])
-    posStrings = newPos
+    neg_strings = ["afraid", "angry", "annoyed", "ashamed", "awful", "bad", "bored", "concerned", "condemned", "confused", "creepy", "cruel", "dangerous", "defeated", "defiant", "depressed", "disgusted", "disturbed", "doubtful", "eerie", "embarrassed", "envious", "evil", "foolish", "frantic", "guilty", "helpless", "hungry", "hurt", "ill", "jealous", "lonely", "mad", "naughty", "obnoxious", "outrageous", "panicky", "repulsive", "scared", "shy", "sleepy","strange", "terrible", "tired", "troubled", "unusual", "upset", "uptight", "weary", "wicked", "worried"]
+    pos_strings = ["agreeable", "alert", "amused", "brave", "bright", "charming", "cheerful", "comfortable", "congrats", "cooperative", "courageous", "delightful", "determined", "eager", "elated", "enchanting", "encouraging", "energetic", "enthusiastic", "excited", "exuberant", "faithful", "fantastic", "friendly", "frowning", "funny", "gentle", "glorious", "good", "happy", "healthy", "helpful", "hilarious", "jolly", "kind", "lively", "lovely", "perfect", "proud", "relaxed", "relieved", "silly", "smiling", "splendid", "successful", "thoughtful", "victorious", "vivacious", "well", "witty", "wonderful"];
+    new_neg = []
+    for i in neg_strings:
+        new_neg.append([i, 0])
+    neg_strings = new_neg
+    new_pos = []
+    for i in pos_strings:
+        new_pos.append([i, 0])
+    pos_strings = new_pos
 
 def get_strings(fn):
     f = open(fn)
@@ -172,7 +171,8 @@ def parse(tweets):
         f = eval(f.readline())
         sys.stdout.flush()
 
-    count = 0
+    global COUNTER
+    COUNTER = 0
     for line in f:
         if (INTERRUPT):
             break;
@@ -190,6 +190,8 @@ def parse(tweets):
                 process(nominee)
         
 
+        # Presenter code
+
         # if not is_retweet(tweet_string) and is_presents(tweet_string):
         #     tokens = tweet_string.split()
         #     pos_tokens = copy.deepcopy(tokens)
@@ -204,18 +206,18 @@ def parse(tweets):
 
 
         # if  is_presenterList(tweet_string.lower()):
-           
-        #     if "best" in tweet_string.lower():
-        #         name = extract_name(tweet_string)
-        #         val=0
-        #         for word in name:
-        #             key=word
-        #             if key in Dict:
-        #                 Dict[key]+=1
-        #             else:
-        #                 Dict[key]=1
+            # if "best" in tweet_string.lower():
+            #     name = extract_name(tweet_string)
+            #     val=0
+            #     for word in name:
+            #         key=word
+            #         if key in presenter_dict:
+            #             presenter_dict[key]+=1
+            #         else:
+            #             presenter_dict[key]=1
 
         if not is_retweet(tweet_string):
+
             # RED CARPET
             if is_red_carpet(tweet_string) and is_best_dressed(tweet_string):
                 tokens = tweet_string.split()
@@ -245,16 +247,14 @@ def parse(tweets):
                     sentiments['downvote'] += 1
 
 
-        if count%10000 == 0:
-            print '\rCount: ',count,
-            sys.stdout.flush()
-        count+=1
+        # if count%10000 == 0:
+        #     print '\rCount: ',count,
+        #     sys.stdout.flush()
+        # count+=1
+        COUNTER += 1
 
     print 'Finished parsing all {0} data.'.format(str(MODE))
     print 'Took {0} seconds.'.format(timeit.default_timer() - start)
-
-    # while True:
-    #     time.sleep(100000)
 
 ##############################
 ###### PROCESS RESULTS #######
@@ -282,29 +282,32 @@ def update_relevant_categories(mentioned):
 
     return relevant
 
-def Dictionary_done():
-    for keys,values in Dict.items():
+def populate_presenters():
+    for keys,values in presenter_dict.items():
 
        if  len(keys.split()) == 2:
             flag=0
             
-            token_list=wordTokenizer.tokenize(keys)
+            token_list=work_tokenizer.tokenize(keys)
             for token in token_list:
-                if token.lower() in stopList:
+                if token.lower() in stop_list:
                     flag=1
                     break
                 
             if values > 5 and flag == 0:
                 pp.pprint(values)
-                if keys not in presentersList:
-                    presentersList.append(keys)
-                    pp.pprint(presentersList)
+                if keys not in presenter_list:
+                    presenter_list.append(keys)
+                    pp.pprint(presenter_list)
             else :
                 continue
 
 ##############################
 ### RETRIEVE TRACKED DATA ####
 ##############################
+
+def get_current_count():
+    return COUNTER
 
 def get_current_winners():
     return categories
@@ -316,11 +319,11 @@ def get_current_parties():
     return parties
 
 def get_current_sentiments():
-    return [sentiments, posStrings, negStrings]
+    return [sentiments, pos_strings, neg_strings]
 
 def get_presenters():
-    Dictionary_done()
-    return presentersList
+    populate_presenters()
+    return presenter_list
 
 def get_nominees(categories):
     nominee_list = []
@@ -436,26 +439,26 @@ def is_one_category(tweet):
     return false        
 
 def is_wishful_tweet(tweet):
-    # for word in wishStrings:
+    # for word in wish_strings:
     #     if word in tweet:
     #         return True
     # return False
-    if any([i in tweet for i in wishStrings]):
+    if any([i in tweet for i in wish_strings]):
         return True
     return False
 
 def is_happy_tweet(tweet):
-    if any([i in tweet for i in posStrings]):
+    if any([i in tweet for i in pos_strings]):
         return True
     return False
 
 def is_sad_tweet(tweet):
-    if any([i in tweet for i in negStrings]):
+    if any([i in tweet for i in neg_strings]):
         return True
     return False
 
 def is_notstop_word(word):
-    for a in stopList:
+    for a in stop_list:
         if a in word:
             return False
     return True
@@ -485,7 +488,7 @@ def is_cat_tweet(word):
     return False
 
 def is_presenterList(tweet):
-    for word in presentStrings:
+    for word in present_strings:
         if word in tweet:
             return True
     return False
@@ -514,18 +517,18 @@ def is_worst_dressed(tweet):
 
 def count_happy_words(tweet):
     count = 0
-    for wordTuple in posStrings:
-        if (' ' + wordTuple[0] + ' ') in tweet:
+    for word_tuple in pos_strings:
+        if (' ' + word_tuple[0] + ' ') in tweet:
             count += 1
-            wordTuple[1] += 1
+            word_tuple[1] += 1
     return count
 
 def count_sad_words(tweet):
     count = 0
-    for wordTuple in negStrings:
-        if (' ' + wordTuple[0] + ' ') in tweet:
+    for word_tuple in neg_strings:
+        if (' ' + word_tuple[0] + ' ') in tweet:
             count += 1
-            wordTuple[1] += 1
+            word_tuple[1] += 1
     return count
 
 ##############################
