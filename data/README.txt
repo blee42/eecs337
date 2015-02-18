@@ -1,1 +1,1 @@
-Place JSONS in this folder
+Place JSON files in this folder
