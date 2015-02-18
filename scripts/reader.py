@@ -174,7 +174,7 @@ def parse(tweets):
 
     count = 0
     for line in f:
-        if (INTERRUPT.is_set()):
+        if (INTERRUPT):
             break;
 
         if MODE == 2015:
